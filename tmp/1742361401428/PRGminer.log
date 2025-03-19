@@ -1,0 +1,32 @@
+2025-03-19 00:17:01,838 - INFO - PRGminer started
+2025-03-19 00:17:01,838 - INFO - Version: 0.1.0
+2025-03-19 00:17:01,838 - INFO - Input file: /Users/naveen/Desktop/prgminer_web/tmp/1742361401428.fasta
+2025-03-19 00:17:01,838 - INFO - Output directory: /Users/naveen/Desktop/prgminer_web/tmp/1742361401428
+2025-03-19 00:17:01,838 - INFO - Prediction level: Phase2
+2025-03-19 00:17:01,838 - INFO - Starting Phase1 prediction to identify R-genes
+2025-03-19 00:17:01,838 - INFO - Starting Phase1 prediction
+2025-03-19 00:17:02,455 - INFO - Initialized Phase1 predictor
+2025-03-19 00:17:02,455 - INFO - Extracting DPC features from sequences
+2025-03-19 00:17:02,630 - INFO - Successfully preprocessed 298 sequences
+2025-03-19 00:17:02,630 - INFO - Reshaped features to (298, 1, 400, 1)
+2025-03-19 00:17:02,630 - INFO - Running model predictions
+2025-03-19 00:17:04,958 - INFO - Model predictions completed successfully
+2025-03-19 00:17:04,959 - INFO - Processed Phase1 predictions with threshold 0.5
+2025-03-19 00:17:04,961 - INFO - Detailed results saved to /Users/naveen/Desktop/prgminer_web/tmp/1742361401428/intermediate_files/Phase1_predictions.tsv
+2025-03-19 00:17:04,962 - INFO - Phase1 results saved to: /Users/naveen/Desktop/prgminer_web/tmp/1742361401428/intermediate_files/Phase1_predictions.tsv
+2025-03-19 00:17:04,963 - INFO - Summary report saved to: /Users/naveen/Desktop/prgminer_web/tmp/1742361401428/prediction_summary.txt
+2025-03-19 00:17:04,963 - INFO - Identified 147 R-genes for Phase2 analysis
+2025-03-19 00:17:04,965 - INFO - Created Phase2 input FASTA with 147 sequences
+2025-03-19 00:17:04,965 - INFO - Starting Phase2 prediction
+2025-03-19 00:17:05,258 - INFO - Initialized Phase2 predictor
+2025-03-19 00:17:05,258 - INFO - Extracting DPC features from sequences
+2025-03-19 00:17:05,360 - INFO - Successfully preprocessed 147 sequences
+2025-03-19 00:17:05,360 - INFO - Reshaped features to (147, 1, 400, 1)
+2025-03-19 00:17:05,360 - INFO - Running model predictions
+2025-03-19 00:17:05,607 - INFO - Model predictions completed successfully
+2025-03-19 00:17:05,609 - INFO - Processed Phase2 predictions with class probabilities
+2025-03-19 00:17:05,610 - INFO - Detailed results saved to /Users/naveen/Desktop/prgminer_web/tmp/1742361401428/intermediate_files/Phase2_predictions.tsv
+2025-03-19 00:17:05,611 - INFO - Summary report updated to: /Users/naveen/Desktop/prgminer_web/tmp/1742361401428/prediction_summary.txt
+2025-03-19 00:17:05,611 - INFO - Final results saved to: /Users/naveen/Desktop/prgminer_web/tmp/1742361401428/PRGminer_results.txt
+2025-03-19 00:17:05,611 - INFO - Total execution time: 3.77 seconds
+2025-03-19 00:17:05,611 - INFO - PRGminer completed successfully

@@ -1,0 +1,26 @@
+PRGminer Prediction Summary
+========================
+
+Prediction Level: Phase1
+Total sequences analyzed: 298
+
+Class Distribution:
+-------------------
+Non-Rgene: 151 sequences (50.67%)
+Rgene: 147 sequences (49.33%)
+
+==================================================
+Prediction Level: Phase2
+Total sequences analyzed: 147
+
+Class Distribution:
+-------------------
+CNL: 59 sequences (40.14%)
+KIN: 1 sequences (0.68%)
+LECRK: 21 sequences (14.29%)
+LYK: 15 sequences (10.20%)
+RLK: 16 sequences (10.88%)
+RLP: 15 sequences (10.20%)
+TNL: 20 sequences (13.61%)
+
+==================================================
