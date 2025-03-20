@@ -27,7 +27,7 @@ const nextConfig = {
     },
 
     basePath: process.env.NODE_ENV === "production" ? "/prgminer" : "",
-    assetPrefix: process.env.NODE_ENV === "production" ? "/https://kaabil.net/prgminer" : "",
+    assetPrefix: process.env.NODE_ENV === "production" ? "/prgminer" : "",
 
     // Disable automatic rewrites as we're using basePath
     async rewrites() {
