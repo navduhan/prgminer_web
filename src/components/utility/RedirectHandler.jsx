@@ -1,7 +1,7 @@
 "use client";
 // Client-side redirect handler
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 // Get base path from environment variable
@@ -14,17 +14,21 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 export default function RedirectHandler() {
   const pathname = usePathname();
   const router = useRouter();
+  const hasRedirected = useRef(false);
 
   useEffect(() => {
-    // Handle production mode redirects
-    if (process.env.NODE_ENV === 'production') {
+    // Only run in production and only once per session
+    if (process.env.NODE_ENV === 'production' && !hasRedirected.current) {
       // If we're at the root, redirect to basePath
-      if (pathname === '/') {
+      if (pathname === '/' && basePath) {
+        hasRedirected.current = true;
         router.replace(`${basePath}/`);
+        return;
       }
       
-      // If the path doesn't include basePath but should, redirect
-      if (pathname !== '/' && !pathname.startsWith(basePath) && !pathname.startsWith('/_next')) {
+      // If the path doesn't include basePath but should
+      if (pathname && pathname !== '/' && !pathname.startsWith(basePath) && !pathname.startsWith('/_next')) {
+        hasRedirected.current = true;
         const newPath = `${basePath}${pathname}`;
         router.replace(newPath);
       }

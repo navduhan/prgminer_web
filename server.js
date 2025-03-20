@@ -22,15 +22,29 @@ app.prepare().then(() => {
 
       // Log all incoming requests for debugging
       console.log(`Processing request: ${pathname}`);
-      
-      // Handle root requests in production - redirect to basePath
-      if (process.env.NODE_ENV === 'production' && (pathname === '/' || pathname === '')) {
+
+      // Only redirect root path, avoiding redirect loops
+      if (process.env.NODE_ENV === 'production' && pathname === '/' && !req.headers.referer) {
         console.log(`Redirecting from root to ${basePath}/`);
-        res.writeHead(302, { Location: `${basePath}/` });
+        res.writeHead(302, { 
+          'Location': `${basePath}/`,
+          'Cache-Control': 'no-cache'
+        });
         res.end();
         return;
       }
       
+      // Don't redirect if already on the basePath
+      if (process.env.NODE_ENV === 'production' && pathname === basePath) {
+        console.log(`Redirecting from ${basePath} to ${basePath}/`);
+        res.writeHead(302, { 
+          'Location': `${basePath}/`,
+          'Cache-Control': 'no-cache'
+        });
+        res.end();
+        return;
+      }
+
       // Handle static files explicitly for the basePath
       if (basePath && pathname.startsWith(`${basePath}/_next`) || 
           basePath && pathname.startsWith(`${basePath}/images/`)) {

@@ -9,6 +9,8 @@ import {Montserrat} from "next/font/google";
 import NavBar from "@/components/NavBar/NavBar";
 import Footer from "@/components/Footer/Footer";
 import RedirectHandler from "@/components/utility/RedirectHandler";
+import CookieHandler from "@/components/utility/CookieHandler";
+import RouteDebugger from "@/components/utility/RouteDebugger";
 
 // import styles
 import "@/styles/globals.css";
@@ -41,6 +43,8 @@ const RootLayout = ({children}) => {
     return (
         <html lang="en">
             <body className={`${montserrat.variable} font-sans`}>
+                <RouteDebugger />
+                <CookieHandler />
                 <RedirectHandler />
                 <NavBar />
                 <main className="flex-grow">
