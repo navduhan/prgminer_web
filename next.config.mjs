@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: true,
+    reactStrictMode: true, 
+    basePath: process.env.NODE_ENV === "production" ? "/prgminer" : "",
+    assetPrefix: process.env.NODE_ENV === "production" ? "/prgminer/" : "",
+
     experimental: {
         serverActions: {
             allowedOrigins: ["*"],
@@ -21,16 +24,13 @@ const nextConfig = {
     serverRuntimeConfig: {
         customServer: true
     },
+    
 
-
-
-    basePath: process.env.NODE_ENV === "production" ? "/prgminer" : "",
-    assetPrefix: process.env.NODE_ENV === "production" ? "/prgminer" : "",
-
-    // Disable automatic rewrites as we're using basePath
-    async rewrites() {
-        return [];
+    publicRuntimeConfig: {
+        basePath: "/prgminer",
     },
+
+
 
 
 }
