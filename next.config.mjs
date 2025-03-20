@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-   
     reactStrictMode: true,
     experimental: {
         serverActions: {
@@ -10,6 +9,7 @@ const nextConfig = {
     staticPageGenerationTimeout: 300,
     images: {
         unoptimized: true,
+        domains: ['kaabil.net'],
     },
     eslint: {
         ignoreDuringBuilds: true,
@@ -27,19 +27,15 @@ const nextConfig = {
     },
 
     basePath: process.env.NODE_ENV === "production" ? "/prgminer" : "",
+    assetPrefix: process.env.NODE_ENV === "production" ? "/prgminer" : "",
 
+    // Disable automatic rewrites as we're using basePath
     async rewrites() {
-        return [
-            {
-                source: "/prgminer/api/:path*",
-                destination: "/api/:path*",
-            },
-            {
-                source: "/prgminer/:path*",
-                destination: "/:path*",
-            },
-        ];
+        return [];
     },
+
+    // Add trailing slashes to ensure consistent path handling
+    trailingSlash: true,
 }
 
 export default nextConfig;
