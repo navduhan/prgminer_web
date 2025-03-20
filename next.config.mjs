@@ -9,7 +9,7 @@ const nextConfig = {
     staticPageGenerationTimeout: 300,
     images: {
         unoptimized: true,
-        domains: ['kaabil.net'],
+       
     },
     eslint: {
         ignoreDuringBuilds: true,
@@ -32,8 +32,7 @@ const nextConfig = {
         return [];
     },
 
-    // Add trailing slashes to ensure consistent path handling
-    trailingSlash: true,
+
 }
 
 export default nextConfig;
