@@ -263,7 +263,7 @@ const HomePage = () => {
 
                 {/* Quick Actions */}
                 <div className="flex gap-4 mt-8">
-                  <Link href={`${basePath}/prediction`} 
+                  <Link href="/prediction"
                     className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold py-3 px-6 rounded-xl 
                               flex items-center justify-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1"
                   >
@@ -272,7 +272,7 @@ const HomePage = () => {
                     </svg>
                     Start Analysis
                   </Link>
-                  <Link href={`${basePath}/help`} 
+                  <Link href="/help "
                     className="flex-1 border-2 border-purple-500 text-purple-600 font-semibold py-3 px-6 rounded-xl 
                               flex items-center justify-center gap-2 transition-all duration-300 hover:bg-purple-50 hover:-translate-y-1"
                   >

@@ -21,7 +21,7 @@ const QuickStartSection = () => {
         <div className="bg-blue-50 rounded-xl p-6 mb-6">
           <p className="text-gray-700">
             New to PRGminer? Explore our{ " " }
-            <Link href={`${basePath}/tutorial`} className="text-blue-600 hover:text-blue-800 font-medium">
+            <Link href="/tutorial" className="text-blue-600 hover:text-blue-800 font-medium">
               step-by-step tutorial
             </Link>{ " " }
             with visual guides and explanations.
