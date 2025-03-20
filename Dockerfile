@@ -42,14 +42,25 @@ COPY package.json ./
 
 RUN npm install
 
-COPY .env.local .env.local
+# Copy all config files
+COPY .env* ./
+COPY next.config.mjs ./
+COPY jsconfig.json ./
+COPY postcss.config.mjs ./
+COPY eslint.config.mjs ./
 
-COPY . .
+# Copy source code and public assets
+COPY src/ ./src/
+COPY public/ ./public/
+COPY server.js ./
 
 # Explicitly set NODE_ENV for the build
 ENV NODE_ENV=production
+ENV NEXT_PUBLIC_BASE_PATH="/prgminer"
 
+# Build the application
 RUN npm run build
+RUN ls -la .next/
 
 # Stage 3: Final image
 
@@ -67,13 +78,16 @@ RUN apt-get update && \
 COPY --from=builder /opt/conda/envs/prgminer /opt/conda/envs/prgminer
 COPY --from=builder /PRGminer /PRGminer
 
+# Create app directory
+WORKDIR /app
+
 # Copy Next.js files
 COPY --from=web-builder /app/.next ./.next
 COPY --from=web-builder /app/public ./public
 COPY --from=web-builder /app/package*.json ./
 COPY --from=web-builder /app/next.config.mjs ./
-COPY --from=web-builder /app/.env.local ./.env.local
-COPY --from=web-builder /app/server.js ./server.js
+COPY --from=web-builder /app/.env* ./
+COPY --from=web-builder /app/server.js ./
 COPY --from=web-builder /app/node_modules ./node_modules
 
 # Ensure Conda environment is sourced properly
@@ -85,6 +99,7 @@ ENV PATH="/opt/conda/envs/prgminer/bin:$PATH"
 ENV CONDA_DEFAULT_ENV=prgminer
 ENV CONDA_PREFIX=/opt/conda/envs/prgminer
 ENV NODE_ENV=production
+ENV NEXT_PUBLIC_BASE_PATH="/prgminer"
 
 # Expose the port
 EXPOSE 3008

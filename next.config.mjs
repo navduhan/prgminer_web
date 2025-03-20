@@ -3,13 +3,20 @@ const nextConfig = {
     reactStrictMode: true,
     experimental: {
         serverActions: {
-            allowedOrigins: ["*"],
+            allowedOrigins: ["kaabil.net", "localhost"],
         }
     },
     staticPageGenerationTimeout: 300,
     images: {
         unoptimized: true,
         domains: ['kaabil.net'],
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'kaabil.net',
+                pathname: '/prgminer/**',
+            },
+        ],
     },
     eslint: {
         ignoreDuringBuilds: true,
@@ -33,6 +40,28 @@ const nextConfig = {
 
     // Add trailing slashes to ensure consistent path handling
     trailingSlash: true,
+
+    // Ensure output is properly configured
+    output: 'standalone',
+    
+    // Configure headers for CORS and caching
+    async headers() {
+        return [
+            {
+                source: '/:path*',
+                headers: [
+                    {
+                        key: 'Access-Control-Allow-Origin',
+                        value: '*',
+                    },
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=3600',
+                    },
+                ],
+            },
+        ];
+    },
 }
 
 export default nextConfig;
