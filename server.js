@@ -23,13 +23,21 @@ app.prepare().then(() => {
       // Log all incoming requests for debugging
       console.log(`Processing request: ${pathname}`);
       
-      // Strip basePath from the pathname if needed
-      let pathWithoutBase = pathname;
-      if (basePath && pathname.startsWith(basePath)) {
-        pathWithoutBase = pathname.slice(basePath.length) || '/';
+      // Handle root requests in production - redirect to basePath
+      if (process.env.NODE_ENV === 'production' && (pathname === '/' || pathname === '')) {
+        console.log(`Redirecting from root to ${basePath}/`);
+        res.writeHead(302, { Location: `${basePath}/` });
+        res.end();
+        return;
       }
       
-      // Handle requests properly with basePath
+      // Handle static files explicitly for the basePath
+      if (basePath && pathname.startsWith(`${basePath}/_next`) || 
+          basePath && pathname.startsWith(`${basePath}/images/`)) {
+        console.log(`Serving static file: ${pathname}`);
+      }
+      
+      // Handle all other requests with Next.js
       await handle(req, res, parsedUrl);
     } catch (err) {
       console.error('Error occurred handling', req.url, err);

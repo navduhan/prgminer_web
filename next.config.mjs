@@ -55,13 +55,41 @@ const nextConfig = {
                         value: '*',
                     },
                     {
+                        key: 'Access-Control-Allow-Methods',
+                        value: 'GET, POST, OPTIONS',
+                    },
+                    {
                         key: 'Cache-Control',
-                        value: 'public, max-age=3600',
+                        value: 'public, max-age=3600, stale-while-revalidate=86400',
+                    },
+                ],
+            },
+            {
+                source: '/_next/static/:path*',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=31536000, immutable',
+                    },
+                ],
+            },
+            {
+                source: '/images/:path*',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=86400',
                     },
                 ],
             },
         ];
     },
+    
+    // Optimize asset loading
+    optimizeFonts: true,
+    compress: true,
+    poweredByHeader: false,
+    generateEtags: true,
 }
 
 export default nextConfig;

@@ -19,12 +19,12 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 // navbar links
 const NAVBAR_LINKS = [
-  {href: "/", label: "Home", icon: AiOutlineHome},
-  {href: "/prediction", label: "Prediction", icon: FaTerminal},
-  {href: "/standalone", label: "Standalone", icon: FaTerminal},
-  {href: "/help", label: "Help", icon: BiHelpCircle},
-
+  {href: `${basePath}/`, label: "Home", icon: AiOutlineHome},
+  {href: `${basePath}/prediction`, label: "Prediction", icon: FaTerminal},
+  {href: `${basePath}/standalone`, label: "Standalone", icon: FaTerminal},
+  {href: `${basePath}/help`, label: "Help", icon: BiHelpCircle},
 ];
+
 // memoized logo component
 const Logo = memo(({ src, alt, width, height, className }) => {
   return (
@@ -57,7 +57,7 @@ const NavBar = () => {
         setIsOpen(prev =>!prev);
     }, []);
 
- return (
+  return (
     <nav className="bg-gradient-to-r from-blue-300/50 to-purple-300/50 shadow-lg py-4 relative z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-center justify-between">
@@ -145,7 +145,7 @@ const NavBar = () => {
                 />
               </div>
               <Logo
-                src={`${basePath}/images/usulogo.png`}
+                src={`${basePath}/images/usulogo2.png`}
                 alt="USU Logo"
                 width={150}
                 height={150}
