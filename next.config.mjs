@@ -22,10 +22,9 @@ const nextConfig = {
         customServer: true
     },
 
-
-
+    // Fix for the 404 errors
     basePath: process.env.NODE_ENV === "production" ? "/prgminer" : "",
-    assetPrefix: process.env.NODE_ENV === "production" ? "https://kaabil.net/prgminer" : "",
+    assetPrefix: process.env.NODE_ENV === "production" ? "/prgminer" : "",
 
     // Disable automatic rewrites as we're using basePath
     async rewrites() {

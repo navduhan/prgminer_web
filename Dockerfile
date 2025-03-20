@@ -46,6 +46,9 @@ COPY .env.local .env.local
 
 COPY . .
 
+# Explicitly set NODE_ENV for the build
+ENV NODE_ENV=production
+
 RUN npm run build
 
 # Stage 3: Final image
@@ -81,6 +84,7 @@ RUN echo "source /opt/conda/etc/profile.d/conda.sh && conda activate prgminer" >
 ENV PATH="/opt/conda/envs/prgminer/bin:$PATH"
 ENV CONDA_DEFAULT_ENV=prgminer
 ENV CONDA_PREFIX=/opt/conda/envs/prgminer
+ENV NODE_ENV=production
 
 # Expose the port
 EXPOSE 3008
