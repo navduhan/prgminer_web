@@ -61,7 +61,7 @@ const AdditionalResources = () => {
         </a>
 
         <a
-          href="https://github.com/usubioinfo/PRGminer"
+          href="https://github.com/usubioinfo/PRGminer" 
           className="block p-6 bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl hover:shadow-lg transition-all duration-300 border border-amber-100 hover:scale-105"
           aria-label="Go to GitHub Repository"
           target="_blank"
