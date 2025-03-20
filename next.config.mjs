@@ -4,12 +4,7 @@ const nextConfig = {
     reactStrictMode: true,
     experimental: {
         serverActions: {
-            allowedOrigins: [
-                "https://kaabil.net",
-                "https://bioinfo.usu.edu",
-                "http://localhost:3008"
-                
-            ],
+            allowedOrigins: ["*"],
         }
     },
     staticPageGenerationTimeout: 300,
@@ -28,19 +23,19 @@ const nextConfig = {
     },
 
     publicRuntimeConfig: {
-        basePath: process.env.NODE_ENV === "production" ? "/PRGminer" : "",
+        basePath: process.env.NODE_ENV === "production" ? "/prgminer" : "",
     },
 
-    basePath: process.env.NODE_ENV === "production" ? "/PRGminer" : "",
+    basePath: process.env.NODE_ENV === "production" ? "/prgminer" : "",
 
     async rewrites() {
         return [
             {
-                source: "/PRGminer/api/:path*",
+                source: "/prgminer/api/:path*",
                 destination: "/api/:path*",
             },
             {
-                source: "/PRGminer/:path*",
+                source: "/prgminer/:path*",
                 destination: "/:path*",
             },
         ];
