@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true, 
-    basePath: process.env.NODE_ENV === "production" ? "/prgminer" : "",
-    assetPrefix: process.env.NODE_ENV === "production" ? "/prgminer/" : "",
+    basePath:  "/prgminer",
+    assetPrefix:"/prgminer/",
 
     experimental: {
         serverActions: {
