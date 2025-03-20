@@ -22,12 +22,10 @@ const nextConfig = {
         customServer: true
     },
 
-    publicRuntimeConfig: {
-        basePath: process.env.NODE_ENV === "production" ? "/prgminer" : "",
-    },
+
 
     basePath: process.env.NODE_ENV === "production" ? "/prgminer" : "",
-    assetPrefix: process.env.NODE_ENV === "production" ? "/prgminer" : "",
+    assetPrefix: process.env.NODE_ENV === "production" ? "https://kaabil.net/prgminer" : "",
 
     // Disable automatic rewrites as we're using basePath
     async rewrites() {
