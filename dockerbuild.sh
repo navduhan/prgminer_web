@@ -28,18 +28,10 @@ do
         docker image rm $CONTAINER:$n
     fi
 done
-
-# Clean up any previous build artifacts
-echo "Cleaning up previous build artifacts..."
-rm -rf .next
-
 # build the new image
 IMAGETAG=$CONTAINER:$(date +%Y%m%d%H%M%S)
-echo "Building image: $IMAGETAG"
+#echo $IMAGETAG
 docker build -t $IMAGETAG .
 
 # start the new image
-echo "Starting container with image: $IMAGETAG"
 docker run $FLAGS $IMAGETAG
-
-echo "Deployment completed successfully."

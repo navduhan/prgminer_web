@@ -6,9 +6,6 @@
 
 import Link from "next/link";
 
-// Get basePath from environment variables
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-
 // not found page component
 const NotFound = () => {
   return (
@@ -18,7 +15,7 @@ const NotFound = () => {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">Page Not Found</h2>
         <p className="text-gray-600 mb-8">The page you are looking for does not exist.</p>
         <Link
-          href={`${basePath}/`}
+          href="/"
           className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl
                      hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg"
         >
