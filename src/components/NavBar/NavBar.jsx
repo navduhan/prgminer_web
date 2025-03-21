@@ -38,9 +38,9 @@ Logo.displayName = "Logo";
 
 // navigation link component
 
-const NavLink = memo(({href, label, icon: Icon, className}) => {
+const NavLink = memo(({href, label, icon: Icon, className, onClick}) => {
   return (
-    <Link href={href} className={className}>
+    <Link href={href} className={className} onClick={onClick}>
       <Icon className="text-xl"/>
       {label}
     </Link>
@@ -55,6 +55,10 @@ const NavBar = () => {
 
     const toggleMenu = useCallback(() => {
         setIsOpen(prev =>!prev);
+    }, []);
+    
+    const closeMenu = useCallback(() => {
+        setIsOpen(false);
     }, []);
 
  return (
@@ -126,7 +130,7 @@ const NavBar = () => {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-gradient-to-r from-blue-500 to-indigo-600 mt-0">
+          <div className="md:hidden absolute top-full left-0 w-full bg-white mt-0 text-gray-800">
             <div className="flex flex-col items-center space-y-4 mb-6 py-6">
               <div className="flex items-center justify-center space-x-4">
                 <Logo
@@ -152,14 +156,15 @@ const NavBar = () => {
                 className="w-24 h-auto object-contain"
               />
             </div>
-            <div className="px-2 pb-3 space-y-1">
+            <div className="px-2 pb-3 flex flex-col items-center space-y-1 w-full">
               {NAVBAR_LINKS.map(({ href, icon, label }) => (
                 <NavLink
                   key={href}
                   href={href}
                   icon={icon}
                   label={label}
-                  className="px-3 py-2 text-white hover:bg-blue-600 transition-colors flex items-center gap-2"
+                  onClick={closeMenu}
+                  className="px-3 py-2 text-gray-800 hover:bg-blue-600 transition-colors flex items-center gap-2 w-full justify-center"
                 />
               ))}
             </div>
