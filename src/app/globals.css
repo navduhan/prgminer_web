@@ -1,0 +1,474 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --navy: #0f2744;
+  --navy-dark: #09192d;
+  --navy-soft: #eef3f8;
+  --tomato: #d93829;
+  --tomato-dark: #b52b1e;
+  --tomato-soft: #fdf0ee;
+  --tomato-border: #f3c1bc;
+  --steel: #4e6e88;
+  --sage: #7d9a8c;
+
+  --paper: #ffffff;
+  --surface: #f8fafc;
+  --ink: #0f1f33;
+  --muted: #526275;
+  --line: #d8e0e8;
+  --line-strong: #94a3b8;
+  --field-border: #64748b;
+  --danger: #b42318;
+  --danger-soft: #fef2f2;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--paper);
+    color: var(--ink);
+    accent-color: var(--tomato);
+    font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    font-size: max(1rem, 1em);
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 2.5px solid var(--tomato);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: #fde2df;
+    color: var(--navy-dark);
+  }
+}
+
+/* Progressive fallback when CSS accent-color is unsupported */
+@supports not (accent-color: #d93829) {
+  input[type="radio"],
+  input[type="checkbox"] {
+    border: 2px solid var(--field-border);
+  }
+}
+
+.font-display {
+  font-family: var(--font-serif), Georgia, "Iowan Old Style", "Times New Roman", serif;
+  letter-spacing: -0.018em;
+}
+
+.font-mono {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Sharp, non-SaaS buttons (3px architectural radius, zero glow fluff) */
+.btn-tomato {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-block-size: 2.65rem;
+  border-radius: 3px;
+  background: var(--tomato);
+  padding: 0.62rem 1.2rem;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border: 1px solid var(--tomato);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-tomato:hover:not(:disabled) {
+  background: var(--tomato-dark);
+  border-color: var(--tomato-dark);
+}
+
+.btn-tomato:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-navy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-block-size: 2.65rem;
+  border-radius: 3px;
+  background: var(--navy);
+  padding: 0.62rem 1.15rem;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border: 1px solid var(--navy);
+  transition: background-color 0.15s ease;
+}
+
+.btn-navy:hover:not(:disabled) {
+  background: var(--navy-dark);
+}
+
+.btn-outline-sharp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-block-size: 2.55rem;
+  border: 1px solid var(--navy);
+  border-radius: 3px;
+  background: var(--paper);
+  padding: 0.55rem 1rem;
+  color: var(--navy);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-outline-sharp:hover:not(:disabled) {
+  background: var(--navy-soft);
+}
+
+.btn-outline-sharp:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-ghost-rule {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-block-size: 2.4rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  background: var(--paper);
+  padding: 0.45rem 0.85rem;
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 650;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-ghost-rule:hover:not(:disabled) {
+  border-color: var(--navy);
+  background: var(--surface);
+}
+
+.btn-ghost-rule:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive USU Navy Masthead (modern-web-guidance: navbar) */
+.site-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 40;
+  background: var(--navy);
+  color: #ffffff;
+  border-block-end: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.header-inner > * {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.site-header.is-measuring * {
+  transition: none !important;
+}
+
+.site-header .menu-button {
+  anchor-name: --prg-menu-button;
+}
+
+.site-header .site-menu {
+  position: fixed;
+  inset: auto;
+  inset-block-start: 4rem;
+  inset-block-start: anchor(--prg-menu-button bottom);
+  inset-inline-end: 1rem;
+  inline-size: min(82dvw, 19rem);
+  max-inline-size: calc(100dvw - 2rem);
+  block-size: fit-content;
+  max-block-size: calc(100dvh - 5rem);
+  margin-block-start: 0.4rem;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  background: var(--navy);
+  color: #ffffff;
+  box-shadow: 0 16px 36px rgba(9, 25, 45, 0.35);
+  overflow: auto;
+  list-style: none;
+}
+
+@supports not selector(:popover-open) {
+  .site-header .site-menu[popover]:not(.\:popover-open) {
+    display: none;
+  }
+}
+
+.site-header.is-wide .menu-button {
+  display: none;
+}
+
+.site-header.is-wide .site-menu {
+  position: static;
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+  inline-size: auto;
+  max-inline-size: none;
+  block-size: 64px;
+  max-block-size: none;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.site-header.is-wide .site-menu::backdrop {
+  display: none;
+}
+
+.prg-nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  inline-size: 100%;
+  padding: 0.65rem 0.9rem;
+  color: #cbd5e1;
+  font-size: 0.86rem;
+  font-weight: 650;
+  text-decoration: none;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.site-header.is-wide .prg-nav-link {
+  inline-size: auto;
+  height: 100%;
+  padding: 0 0.95rem;
+}
+
+.prg-nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.prg-nav-link[aria-current="page"] {
+  color: #ffffff;
+}
+
+.prg-nav-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  border-block-end: 3px solid var(--tomato);
+}
+
+/* Accessible Single-Row Tablist (modern-web-guidance: tabs) */
+.prg-tablist {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: inline proximity;
+  border-block-end: 1px solid var(--line);
+  gap: 0.15rem;
+  scrollbar-width: thin;
+}
+
+.prg-tab {
+  position: relative;
+  flex: none;
+  scroll-snap-align: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.72rem 1rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.prg-tab:hover {
+  color: var(--navy);
+  background: var(--surface);
+}
+
+.prg-tab[aria-selected="true"] {
+  color: var(--navy);
+}
+
+.prg-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  border-block-end: 3px solid var(--tomato);
+}
+
+/* Responsive Data Table (modern-web-guidance: responsive-table) */
+.prg-table-region {
+  overflow: auto;
+  max-inline-size: 100%;
+  max-block-size: min(640px, 78vh);
+  container-type: inline-size;
+}
+
+.prg-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.prg-table thead {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
+  background: var(--surface);
+}
+
+.prg-table tbody th[scope="row"] {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+  background: var(--paper);
+}
+
+.prg-table tbody tr:hover th[scope="row"],
+.prg-table tbody tr:hover td {
+  background: #f4f7fb;
+}
+
+@container (width < 640px) {
+  .prg-table-responsive,
+  .prg-table-responsive thead,
+  .prg-table-responsive tbody,
+  .prg-table-responsive tr,
+  .prg-table-responsive th,
+  .prg-table-responsive td {
+    display: block;
+  }
+
+  .prg-table-responsive thead {
+    display: none;
+  }
+
+  .prg-table-responsive tbody tr {
+    margin-block-end: 0.85rem;
+    border: 1px solid var(--line);
+    background: var(--paper);
+  }
+
+  .prg-table-responsive tbody th[scope="row"] {
+    position: sticky;
+    inset-block-start: 0;
+    background: var(--surface);
+    border-block-end: 1px solid var(--line);
+  }
+
+  .prg-table-responsive tbody td[data-label]::before {
+    content: attr(data-label) ": ";
+    font-weight: 700;
+    color: var(--muted);
+    margin-inline-end: 0.35rem;
+  }
+}
+
+/* Probability rank highlights (Tomato 1st / Navy 2nd / Steel 3rd) */
+.prob-rank {
+  position: relative;
+  font-variant-numeric: tabular-nums;
+}
+
+.prob-rank-badge {
+  display: inline-grid;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-inline-end: 0.45rem;
+  place-items: center;
+  border-radius: 2px;
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.prob-rank-1 {
+  background: var(--tomato-soft) !important;
+  box-shadow: inset 3px 0 var(--tomato);
+}
+.prob-rank-1 .prob-rank-badge {
+  background: var(--tomato);
+}
+
+.prob-rank-2 {
+  background: var(--navy-soft) !important;
+  box-shadow: inset 3px 0 var(--navy);
+}
+.prob-rank-2 .prob-rank-badge {
+  background: var(--navy);
+}
+
+.prob-rank-3 {
+  background: #f1f5f9 !important;
+  box-shadow: inset 3px 0 var(--steel);
+}
+.prob-rank-3 .prob-rank-badge {
+  background: var(--steel);
+}
+
+/* Interactive SVG molecule hover cue */
+.svg-receptor {
+  cursor: pointer;
+  transition: opacity 0.16s ease;
+}
+
+.svg-receptor:hover {
+  opacity: 0.88;
+}
+
+/* Native Modal Dialog scroll containment (modern-web-guidance: dialog) */
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  background: rgba(9, 25, 45, 0.55);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}

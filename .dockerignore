@@ -1,8 +1,15 @@
 .git
+.gitignore
 .next
 node_modules
-npm-debug.log
+npm-debug.log*
 Dockerfile
 .dockerignore
 .DS_Store
 tmp
+data
+deploy/data
+deploy/docker.env
+deploy/.docker.env.*
+public/PRGminer.tar.gz
+public/download
