@@ -5,11 +5,18 @@ S4PRED_COMMIT=5bc16ee55d98015ca4bbdc6741ab0c64f6f7744b
 S4PRED_REPOSITORY=https://github.com/psipred/s4pred.git
 S4PRED_WEIGHTS_URL=http://bioinfadmin.cs.ucl.ac.uk/downloads/s4pred/weights.tar.gz
 S4PRED_WEIGHTS_MD5=e04ad7d10b61551f7e07a86b65bb88dc
+S4PRED_WEIGHTS_SHA256=6a91e887c01bac41b11249ae098fe0d43bcb9e3e15c746758a24a3299fe20283
 
 git clone --filter=blob:none "$S4PRED_REPOSITORY" /opt/s4pred
 git -C /opt/s4pred checkout --detach "$S4PRED_COMMIT"
-curl --fail --location --retry 3 --output /tmp/s4pred-weights.tar.gz "$S4PRED_WEIGHTS_URL"
+
+# UCL's mirror occasionally serves an expired TLS certificate on its HTTP->HTTPS redirect;
+# integrity is strictly enforced via pinned SHA-256 and MD5 verification below.
+if ! curl --fail --location --retry 3 --output /tmp/s4pred-weights.tar.gz "$S4PRED_WEIGHTS_URL"; then
+    curl --fail --insecure --location --retry 3 --output /tmp/s4pred-weights.tar.gz "$S4PRED_WEIGHTS_URL"
+fi
 echo "$S4PRED_WEIGHTS_MD5  /tmp/s4pred-weights.tar.gz" | md5sum --check --strict
+echo "$S4PRED_WEIGHTS_SHA256  /tmp/s4pred-weights.tar.gz" | sha256sum --check --strict
 tar -xzf /tmp/s4pred-weights.tar.gz -C /opt/s4pred
 rm -f /tmp/s4pred-weights.tar.gz
 rm -rf /opt/s4pred/.git
@@ -20,6 +27,8 @@ S4PRED_PYTHON=/opt/s4pred-venv/bin/python
 PYPI_INDEX=https://pypi.org/simple
 PYTORCH_CPU_INDEX=https://download.pytorch.org/whl/cpu
 
+# Keep PyPI as the primary index so transitive build dependencies (for example,
+# flit_core) are not looked up exclusively in the PyTorch wheel repository.
 "$S4PRED_PIP" install --no-cache-dir \
     --index-url "$PYPI_INDEX" \
     typing-extensions==4.12.2 \
