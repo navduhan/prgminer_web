@@ -7,7 +7,7 @@ This deployment runs `prgminer_web` as a hardened two-container stack (`prgminer
 1. **HPC SLURM Prediction Gateway:** Submitted FASTA jobs are validated, Turnstile-verified, uploaded over SFTP (`0600`) to the biocluster, and executed via `sbatch --parsable --wait` using `run_prgminer_web.slurm` (`ml-gpu` module).
 2. **Private Tokenized Results:** Each submission returns a random 256-bit bearer token stored only in the URL `#` fragment (`#job=...&token=...`), retained for 30 days (`PREDICTION_JOB_RETENTION_MS=2592000000`).
 3. **2D & 3D Structure Prediction:** S4PRED runs locally inside `/opt/s4pred-venv` for fast secondary structure; tertiary 3D structures use ESMFold (`<= 400` aa) and SWISS-MODEL (`> 400` aa when `SWISS_MODEL_TOKEN` is configured).
-4. **Automated GitHub Standalone Packaging:** `deploy/package-standalone.sh` resolves the latest commit of `usubioinfo/PRGminer` via `git ls-remote`, downloads the `codeload.github.com` tarball (including bundled `.keras` and `.tflite` weights), and publishes `prgminer-standalone.tar.gz`, `SHA256SUMS`, and `REVISION.txt` under `/prgminer/download/`.
+4. **Automated GitHub Standalone Packaging:** `deploy/package-standalone.sh` resolves the latest commit of `usubioinfo/PRGminer` via `git ls-remote`, downloads the `codeload.github.com` tarball (including bundled `.tflite` weights), and publishes `prgminer-standalone.tar.gz`, `SHA256SUMS`, and `REVISION.txt` under `/prgminer/download/`.
 
 ## Quick Start (`./start.sh`)
 

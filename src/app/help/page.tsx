@@ -59,8 +59,8 @@ const FAQ_ITEMS = [
     defaultOpen: false,
   },
   {
-    q: 'Which model formats are bundled in the standalone CLI (.keras vs .tflite)?',
-    a: 'Both Phase I and Phase II checkpoints are bundled directly inside the repository as Keras 3 archives (prgminer_phase1.keras, prgminer_phase2.keras) and LiteRT / TensorFlow Lite flatbuffers (prgminer_phase1.tflite, prgminer_phase2.tflite) verified via SHA-256 checksums—no Git LFS or separate weight download step is required.',
+    q: 'How are model weights distributed in the standalone CLI?',
+    a: 'Both Phase I (prgminer_phase1.tflite, 48.4 MiB) and Phase II (prgminer_phase2.tflite, 24.8 MiB) checkpoints are bundled directly inside the repository as LiteRT / TensorFlow Lite flatbuffers verified via SHA-256 checksums (prgminer --models-status)—no separate weight download step is required.',
     defaultOpen: false,
   },
   {

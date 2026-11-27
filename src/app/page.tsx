@@ -381,7 +381,7 @@ export default function HomePage() {
           <dl className="divide-y divide-[var(--line)] border-y border-[var(--line)] text-xs">
             <div className="py-2.5">
               <dt className="font-mono font-bold text-[var(--navy)]">
-                01 · Phase I Binary Gate (prgminer_phase1.keras / .tflite)
+                01 · Phase I Binary Gate (prgminer_phase1.tflite)
               </dt>
               <dd className="mt-0.5 leading-relaxed text-[var(--muted)]">
                 Filters non-R-gene housekeeping proteins from proteome inputs while retaining
@@ -390,7 +390,7 @@ export default function HomePage() {
             </div>
             <div className="py-2.5">
               <dt className="font-mono font-bold text-[var(--tomato)]">
-                02 · Phase II Family Classifier (prgminer_phase2.keras / .tflite)
+                02 · Phase II Family Classifier (prgminer_phase2.tflite)
               </dt>
               <dd className="mt-0.5 leading-relaxed text-[var(--muted)]">
                 Assigns calibrated 8-class probabilities across{' '}
@@ -683,8 +683,8 @@ export default function HomePage() {
 
           <p className="text-xs leading-relaxed text-[var(--muted)]">
             Screen complete crop or wild-relative proteomes (&gt;10,000 sequences) locally on Linux
-            or macOS workstations with bundled <code className="font-mono">.keras</code> and{' '}
-            <code className="font-mono">.tflite</code> Phase I &amp; II checkpoints:
+            or macOS workstations with bundled <code className="font-mono">.tflite</code> Phase I
+            &amp; II checkpoints:
           </p>
 
           <div className="rounded-[3px] border border-[var(--navy-dark)] bg-[#0f2744] text-white">

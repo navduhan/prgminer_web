@@ -11,7 +11,7 @@ Secure Next.js web application and HPC SLURM prediction gateway for **PRGminer**
 - **Interactive R-Gene Domain Architecture Studio:** Explore N-to-C terminal domain schematics (`CC`, `TIR`, `NB-ARC`, `eLRR`, `LRR`, `LECM`, `LYSM`, `TM`, `Kinase`), cellular localization, and curated plant benchmark sequences.
 - **Hardened Cluster Gateway:** Async job submission (`202 Accepted`) over SSH/SFTP (`ssh2`) with ED25519 host-key pinning, Cloudflare Turnstile verification, Nginx rate limiting, and fragment-only job tokens.
 - **Integrated 2D & 3D Structure Prediction:** In-container S4PRED secondary structure diagrams and interactive NGL 3D structure viewer via ESMFold / SWISS-MODEL.
-- **Automated GitHub Standalone Archive:** Packages `prgminer-standalone.tar.gz` (with bundled `.keras` and `.tflite` weights), `SHA256SUMS`, and `REVISION.txt` directly from `usubioinfo/PRGminer`.
+- **Automated GitHub Standalone Archive:** Packages `prgminer-standalone.tar.gz` (with bundled `.tflite` weights), `SHA256SUMS`, and `REVISION.txt` directly from `usubioinfo/PRGminer`.
 
 ## Local Development
 

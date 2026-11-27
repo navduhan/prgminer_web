@@ -45,12 +45,11 @@ if [[ -z "$extracted_dir" || ! -f "$extracted_dir/pyproject.toml" || ! -f "$extr
 fi
 
 for model_file in \
-    PRGminer/models/prgminer_phase1.keras \
-    PRGminer/models/prgminer_phase2.keras \
     PRGminer/models/prgminer_phase1.tflite \
-    PRGminer/models/prgminer_phase2.tflite; do
+    PRGminer/models/prgminer_phase2.tflite \
+    PRGminer/models/model_manifest.json; do
     if [[ ! -s "$extracted_dir/$model_file" ]]; then
-        printf 'Missing bundled model artifact in source archive: %s\n' "$model_file" >&2
+        printf 'Missing bundled TFLite model artifact in source archive: %s\n' "$model_file" >&2
         exit 1
     fi
 done

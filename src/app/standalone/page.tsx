@@ -26,16 +26,16 @@ const INSTALL_TABS: ReadonlyArray<{
     id: 'github',
     label: 'GitHub + uv / pip',
     summary:
-      'Clone directly from usubioinfo/PRGminer. All Phase I & Phase II .keras and .tflite weights are bundled inside the repository and verified via SHA-256 checksums.',
-    commands: `# 1. Clone repository (includes bundled .keras and .tflite models)
+      'Clone directly from usubioinfo/PRGminer. Both Phase I and Phase II .tflite checkpoints are bundled inside the repository and verified via SHA-256 checksums.',
+    commands: `# 1. Clone repository (includes bundled .tflite models)
 git clone https://github.com/usubioinfo/PRGminer.git
 cd PRGminer
 
-# 2. Install with uv (or standard pip install .)
+# 2. Install lightweight runtime with uv (or pip install .)
 uv sync --python 3.11
 uv run prgminer --models-status
 
-# 3. Run two-phase R-gene prediction (.keras default, or -b tflite)
+# 3. Run two-phase R-gene prediction
 uv run prgminer -i PRGminer/example/example.fasta -od results_phase2 -l Phase2`,
   },
   {
@@ -53,8 +53,8 @@ tar -xzf prgminer-standalone.tar.gz
 cd PRGminer
 pip install .
 
-# 3. Execute fast TFLite or Keras inference
-prgminer -i PRGminer/example/example.fasta -od results_phase2 -l Phase2 -b tflite`,
+# 3. Execute fast LiteRT / TFLite inference
+prgminer -i PRGminer/example/example.fasta -od results_phase2 -l Phase2`,
   },
   {
     id: 'conda',
@@ -65,7 +65,7 @@ prgminer -i PRGminer/example/example.fasta -od results_phase2 -l Phase2 -b tflit
 conda env create -f environment.yml
 conda activate PRGminer
 
-# 2. Verify bundled .keras & .tflite model checksums
+# 2. Verify bundled .tflite model checksums
 PRGminer --models-status
 
 # 3. Screen a whole-genome translated plant proteome
@@ -126,16 +126,10 @@ const CLI_FLAGS = [
     spec: 'Inference depth: Phase1 (binary Rgene/Non-Rgene) or Phase2 (Phase I + 8 families).',
   },
   {
-    flag: '-b, --backend',
-    defaultVal: 'auto',
-    required: false,
-    spec: 'Model runtime: auto, keras (.keras checkpoints), or tflite (.tflite XNNPACK engine).',
-  },
-  {
     flag: '--models-status',
     defaultVal: 'Flag',
     required: false,
-    spec: 'Verify SHA-256 checksums of bundled .keras and .tflite weights and exit.',
+    spec: 'Verify SHA-256 checksums of bundled .tflite weights and exit.',
   },
   {
     flag: '-v, --version',
@@ -206,16 +200,17 @@ export default function StandalonePage() {
           <p className="max-w-2xl text-sm leading-relaxed text-[var(--muted)]">
             For unrestricted genome-wide screens exceeding the 10,000-sequence web workbench cap or
             automated integration into local bioinformatics workflows, install the standalone Python
-            package. Both <code className="font-mono text-[var(--ink)]">.keras</code> (Keras 3) and{' '}
-            <code className="font-mono text-[var(--ink)]">.tflite</code> (LiteRT / TensorFlow Lite)
-            checkpoints are bundled directly in the repository with SHA-256 checksum verification—no
-            separate model download step is required.
+            package. Both Phase I (<code className="font-mono text-[var(--ink)]">48.4 MiB</code>) and
+            Phase II (<code className="font-mono text-[var(--ink)]">24.8 MiB</code>){' '}
+            <code className="font-mono text-[var(--ink)]">.tflite</code> checkpoints are bundled
+            directly in the repository with SHA-256 checksum verification—no separate model download
+            step is required.
           </p>
 
           <dl className="flex flex-wrap gap-x-6 gap-y-2 pt-1 font-mono text-xs text-[var(--muted)]">
             <div>
-              <dt className="inline font-bold text-[var(--navy)]">Bundled Formats: </dt>
-              <dd className="inline">.keras (Keras 3) + .tflite (LiteRT)</dd>
+              <dt className="inline font-bold text-[var(--navy)]">Bundled Checkpoints: </dt>
+              <dd className="inline">73.2 MiB total (.tflite XNNPACK)</dd>
             </div>
             <div>
               <dt className="inline font-bold text-[var(--navy)]">Encoding: </dt>
@@ -234,7 +229,7 @@ export default function StandalonePage() {
               Versioned GitHub Archive
             </span>
             <span className="rounded-[2px] border border-[var(--line-strong)] bg-white px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--tomato)]">
-              .keras + .tflite
+              Bundled .tflite
             </span>
           </div>
 
@@ -243,8 +238,8 @@ export default function StandalonePage() {
           </h2>
           <p className="mt-1.5 text-xs leading-relaxed text-[var(--muted)]">
             Packaged directly from the verified GitHub revision with{' '}
-            <code className="font-mono text-[var(--ink)]">prgminer_phase1.{'{keras,tflite}'}</code>,{' '}
-            <code className="font-mono text-[var(--ink)]">prgminer_phase2.{'{keras,tflite}'}</code>,{' '}
+            <code className="font-mono text-[var(--ink)]">prgminer_phase1.tflite</code>,{' '}
+            <code className="font-mono text-[var(--ink)]">prgminer_phase2.tflite</code>,{' '}
             <code className="font-mono text-[var(--ink)]">model_manifest.json</code>,{' '}
             <code className="font-mono text-[var(--ink)]">pyproject.toml</code>, and example FASTA
             sequences.
@@ -465,12 +460,11 @@ export default function StandalonePage() {
                 />
                 <div>
                   <p className="font-semibold text-[var(--ink)]">
-                    Native Keras 3 (<code className="font-mono">.keras</code>) &amp; LiteRT (
-                    <code className="font-mono">.tflite</code>)
+                    LiteRT / TensorFlow Lite (<code className="font-mono">.tflite</code>)
                   </p>
                   <p className="mt-0.5 leading-relaxed text-[var(--muted)]">
-                    Ships compact <code className="font-mono text-[var(--ink)]">float16</code>{' '}
-                    checkpoints directly in Git (&lt;90 MB per model) with SHA-256 verification via{' '}
+                    Ships compact quantized flatbuffers (&lt;50 MiB per model) directly in Git with
+                    SHA-256 verification via{' '}
                     <code className="font-mono text-[var(--ink)]">model_manifest.json</code>.
                   </p>
                 </div>
@@ -478,10 +472,10 @@ export default function StandalonePage() {
               <li className="flex items-start gap-3 px-5 py-3.5">
                 <Cpu className="mt-0.5 h-4 w-4 shrink-0 text-[var(--navy)]" aria-hidden="true" />
                 <div>
-                  <p className="font-semibold text-[var(--ink)]">Python 3.10+ Scientific Stack</p>
+                  <p className="font-semibold text-[var(--ink)]">Lightweight XNNPACK Stack</p>
                   <p className="mt-0.5 leading-relaxed text-[var(--muted)]">
-                    Works with Keras 3 (TensorFlow or PyTorch backend) or ultra-lightweight TFLite /
-                    LiteRT CPU execution alongside Biopython, NumPy, and Pandas.
+                    Runs via <code className="font-mono text-[var(--ink)]">ai-edge-litert</code> (or
+                    existing TensorFlow installations) alongside Biopython, NumPy, and Pandas.
                   </p>
                 </div>
               </li>
@@ -491,7 +485,7 @@ export default function StandalonePage() {
                   aria-hidden="true"
                 />
                 <div>
-                  <p className="font-semibold text-[var(--ink)]">~300 MB Disk &amp; 2–4 GB RAM</p>
+                  <p className="font-semibold text-[var(--ink)]">~100 MB Disk &amp; 1–2 GB RAM</p>
                   <p className="mt-0.5 leading-relaxed text-[var(--muted)]">
                     Screens 35,000+ translated plant proteins in under two minutes on standard
                     multi-core laptops or workstations.
