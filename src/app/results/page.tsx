@@ -88,7 +88,9 @@ export default function ResultsPage() {
   const [pageSize, setPageSize] = useState(15);
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedModalFasta, setCopiedModalFasta] = useState(false);
-  const [structureBusy, setStructureBusy] = useState('');
+  const [liveStructures, setLiveStructures] = useState<
+    Record<string, { secondary: string; tertiary: string }>
+  >({});
 
   // Native <dialog> modal for viewing FASTA + domain schematic of a sequence
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -263,42 +265,45 @@ export default function ResultsPage() {
     );
   };
 
-  const openStructure = async (kind: 'secondary' | 'tertiary', sampleId: string) => {
-    if (!bookmark) return;
-    const key = `${kind}:${sampleId}`;
-    setStructureBusy(key);
-    try {
-      const res = await fetch(withBasePath(`/api/structure/${kind}`), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-PRGminer-Job-Token': bookmark.jobToken,
-        },
-        body: JSON.stringify({ jobId: bookmark.jobId, sampleId }),
-      });
-      const data = (await res.json()) as Record<string, unknown> & { error?: string };
-      if (!res.ok) throw new Error(data.error || 'Structure prediction failed.');
+  useEffect(() => {
+    if (!bookmark || job?.status !== 'completed') return;
+    let cancelled = false;
+    const refreshStructures = async () => {
       try {
-        sessionStorage.setItem(
-          'prgminer_structure_view',
-          JSON.stringify({ job: bookmark.jobId, sample: sampleId, kind, data }),
+        const res = await fetch(
+          withBasePath(`/api/structure/status?jobId=${encodeURIComponent(bookmark.jobId)}`),
+          {
+            headers: { 'X-PRGminer-Job-Token': bookmark.jobToken },
+            cache: 'no-store',
+          },
         );
+        if (res.ok && !cancelled) {
+          setLiveStructures(
+            (await res.json()) as Record<string, { secondary: string; tertiary: string }>,
+          );
+        }
       } catch {
-        // Ignore storage quota
+        // Keep last known structure states
       }
-      const frag = new URLSearchParams({
-        job: bookmark.jobId,
-        token: bookmark.jobToken,
-        sample: sampleId,
-        kind,
-        phase: activePhase,
-      });
-      router.push(`/structure#${frag.toString()}`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Structure prediction failed.');
-    } finally {
-      setStructureBusy('');
-    }
+    };
+    void refreshStructures();
+    const timer = window.setInterval(() => void refreshStructures(), 8000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
+  }, [bookmark, job?.status]);
+
+  const openStructure = (kind: 'secondary' | 'tertiary', sampleId: string) => {
+    if (!bookmark) return;
+    const frag = new URLSearchParams({
+      job: bookmark.jobId,
+      token: bookmark.jobToken,
+      sample: sampleId,
+      kind,
+      phase: activePhase,
+    });
+    router.push(`/structure#${frag.toString()}`);
   };
 
   const openSequenceModal = (row: Row) => {
@@ -758,7 +763,10 @@ export default function ResultsPage() {
                     const sampleId = String(row.SampleID ?? `row_${idx}`);
                     const pred = String(row.Prediction ?? '');
                     const ranks = topProbabilityRanks(row, probabilityCols);
-                    const structState = job.structures?.[sampleId];
+                    const structState = liveStructures[sampleId] || job.structures?.[sampleId];
+                    const seqLength = job.sequences?.[sampleId]?.replace(/X/g, '').length ?? 0;
+                    const exceeds3DLimit =
+                      seqLength > 400 || structState?.tertiary === 'unsupported';
 
                     return (
                       <tr key={sampleId}>
@@ -833,28 +841,37 @@ export default function ResultsPage() {
 
                             <button
                               type="button"
-                              disabled={Boolean(structureBusy)}
-                              onClick={() => void openStructure('secondary', sampleId)}
-                              className="rounded-[2px] border border-[var(--tomato-border)] bg-[var(--tomato-soft)] px-2 py-1 font-bold text-[var(--tomato-dark)] transition hover:border-[var(--tomato)] disabled:opacity-50"
+                              onClick={() => openStructure('secondary', sampleId)}
+                              className="rounded-[2px] border border-[var(--tomato-border)] bg-[var(--tomato-soft)] px-2 py-1 font-bold text-[var(--tomato-dark)] transition hover:border-[var(--tomato)]"
                             >
-                              {structureBusy === `secondary:${sampleId}`
-                                ? '2D…'
-                                : structState?.secondary === 'ready'
-                                  ? 'View 2D'
+                              {structState?.secondary === 'ready'
+                                ? 'View 2D'
+                                : structState?.secondary === 'running'
+                                  ? '2D Running…'
                                   : 'Predict 2D'}
                             </button>
 
                             <button
                               type="button"
-                              disabled={Boolean(structureBusy)}
-                              onClick={() => void openStructure('tertiary', sampleId)}
-                              className="rounded-[2px] border border-[var(--navy)] bg-[var(--navy-soft)] px-2 py-1 font-bold text-[var(--navy)] transition hover:bg-[var(--navy)] hover:text-white disabled:opacity-50"
+                              title={
+                                exceeds3DLimit
+                                  ? `${seqLength ? `${seqLength} aa — ` : ''}Direct ESMFold 3D folding is limited to ≤400 aa. Click for full-length modeling options.`
+                                  : 'Predict or view 3D coordinates via ESMFold (≤400 aa)'
+                              }
+                              onClick={() => openStructure('tertiary', sampleId)}
+                              className={`rounded-[2px] border px-2 py-1 font-bold transition ${
+                                exceeds3DLimit
+                                  ? 'border-[var(--line-strong)] bg-white text-[var(--steel)] hover:border-[var(--navy)] hover:text-[var(--navy)]'
+                                  : 'border-[var(--navy)] bg-[var(--navy-soft)] text-[var(--navy)] hover:bg-[var(--navy)] hover:text-white'
+                              }`}
                             >
-                              {structureBusy === `tertiary:${sampleId}`
-                                ? '3D…'
+                              {exceeds3DLimit
+                                ? '3D (>400 aa)'
                                 : structState?.tertiary === 'ready'
                                   ? 'View 3D'
-                                  : 'Predict 3D'}
+                                  : structState?.tertiary === 'running'
+                                    ? '3D Running…'
+                                    : 'Predict 3D'}
                             </button>
                           </div>
                         </td>

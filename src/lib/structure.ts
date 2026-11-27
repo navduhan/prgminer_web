@@ -2,18 +2,27 @@ import { execFile } from 'child_process';
 import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
-import { promisify } from 'util';
-import zlib from 'zlib';
 import { PREDICTION_CONFIG } from './config';
 
-const gunzip = promisify(zlib.gunzip);
 const message = (error: unknown) => (error instanceof Error ? error.message : String(error));
+
+export const ESMFOLD_MAX_RESIDUES = 400;
 
 export type SecondaryStructure = {
   amino_acids: string;
   prediction: string;
   confidence: string;
 };
+
+export class StructurePending extends Error {
+  readonly method: string;
+
+  constructor(msg: string, method = 'ESMFold') {
+    super(msg);
+    this.name = 'StructurePending';
+    this.method = method;
+  }
+}
 
 export async function predictSecondary(sequence: string): Promise<SecondaryStructure> {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'prgminer-s4pred-'));
@@ -69,86 +78,13 @@ async function esmFold(sequence: string) {
   throw new Error(lastError);
 }
 
-async function swissModel(sequence: string) {
-  const token = PREDICTION_CONFIG.structure.swissModelToken;
-  if (!token) {
-    throw new Error('SWISS_MODEL_TOKEN is not configured for R-gene proteins longer than 400 residues.');
-  }
-  const submitted = await fetch('https://swissmodel.expasy.org/automodel', {
-    method: 'POST',
-    headers: { Authorization: `Token ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      target_sequences: sequence,
-      project_title: 'PRGminer R-gene structure prediction',
-    }),
-    signal: AbortSignal.timeout(30_000),
-    cache: 'no-store',
-  });
-  if (!submitted.ok) throw new Error(`SWISS-MODEL submission returned HTTP ${submitted.status}.`);
-  const project = (await submitted.json()) as { project_id?: string };
-  if (!project.project_id) throw new Error('SWISS-MODEL did not return a project identifier.');
-
-  for (let attempt = 0; attempt < 60; attempt += 1) {
-    await new Promise((resolve) => setTimeout(resolve, 10_000));
-    const statusResponse = await fetch(
-      `https://swissmodel.expasy.org/project/${encodeURIComponent(project.project_id)}/models/summary/`,
-      {
-        headers: { Authorization: `Token ${token}` },
-        signal: AbortSignal.timeout(30_000),
-        cache: 'no-store',
-      },
-    );
-    if (!statusResponse.ok) throw new Error(`SWISS-MODEL status returned HTTP ${statusResponse.status}.`);
-    const status = (await statusResponse.json()) as {
-      status?: string;
-      models?: { coordinates_url?: string }[];
-    };
-    if (status.status === 'FAILED') throw new Error('SWISS-MODEL structure prediction failed.');
-    if (status.status === 'COMPLETED') {
-      const url = status.models?.[0]?.coordinates_url;
-      if (!url) throw new Error('SWISS-MODEL completed without coordinates.');
-      const coordinatesUrl = new URL(url, 'https://swissmodel.expasy.org');
-      if (
-        coordinatesUrl.protocol !== 'https:' ||
-        (coordinatesUrl.hostname !== 'swissmodel.expasy.org' &&
-          !coordinatesUrl.hostname.endsWith('.expasy.org'))
-      ) {
-        throw new Error('SWISS-MODEL returned an unexpected coordinate location.');
-      }
-      const coordinates = await fetch(coordinatesUrl, {
-        signal: AbortSignal.timeout(60_000),
-        cache: 'no-store',
-      });
-      if (!coordinates.ok) {
-        throw new Error(`SWISS-MODEL coordinates returned HTTP ${coordinates.status}.`);
-      }
-      const buffer = Buffer.from(await coordinates.arrayBuffer());
-      try {
-        return (await gunzip(buffer)).toString('utf8');
-      } catch {
-        return buffer.toString('utf8');
-      }
-    }
-  }
-  throw new Error('SWISS-MODEL structure prediction timed out.');
-}
-
-export async function predictTertiary(sequence: string) {
+export async function predictTertiary(sequence: string, beforeEsm?: () => void) {
+  beforeEsm?.();
   try {
-    if (sequence.length <= 400) {
-      try {
-        return { pdb: await esmFold(sequence), method: 'ESMFold' };
-      } catch (error) {
-        if (PREDICTION_CONFIG.structure.swissModelToken) {
-          return { pdb: await swissModel(sequence), method: 'SWISS-MODEL (ESMFold fallback)' };
-        }
-        throw new Error(
-          `The ESMFold service is temporarily unavailable. Please retry later. ${message(error)}`,
-        );
-      }
-    }
-    return { pdb: await swissModel(sequence), method: 'SWISS-MODEL' };
+    return { pdb: await esmFold(sequence), method: 'ESMFold' };
   } catch (error) {
-    throw new Error(`Tertiary-structure prediction failed: ${message(error)}`);
+    throw new Error(
+      `The ESMFold 3D folding service is temporarily unavailable. Please retry shortly (${message(error)}).`,
+    );
   }
 }

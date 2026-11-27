@@ -405,8 +405,8 @@ export default function HomePage() {
                 03 · 2D Topology &amp; 3D Folding
               </dt>
               <dd className="mt-0.5 leading-relaxed text-[var(--muted)]">
-                Integrates single-sequence S4PRED secondary structure tracks alongside ESMFold and
-                SWISS-MODEL 3D coordinate inspection.
+                Integrates full-length single-sequence S4PRED secondary structure tracks alongside
+                rapid ESMFold 3D coordinate inspection (&le;400 aa).
               </dd>
             </div>
           </dl>

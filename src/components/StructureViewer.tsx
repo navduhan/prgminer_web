@@ -75,6 +75,7 @@ export default function StructureViewer({
     .join(' or ');
 
   const safeFilename = sampleId.replace(/[^a-zA-Z0-9_.-]/g, '_');
+  const coordFormat = /^\s*data_/m.test(pdb) || pdb.includes('_atom_site.') ? 'cif' : 'pdb';
 
   useEffect(() => {
     if (!containerRef.current || !pdb) return;
@@ -88,7 +89,7 @@ export default function StructureViewer({
         stage = currentStage;
         stageRef.current = currentStage;
         return currentStage
-          .loadFile(new Blob([pdb], { type: 'text/plain' }), { ext: 'pdb' })
+          .loadFile(new Blob([pdb], { type: 'text/plain' }), { ext: coordFormat })
           .then((component) => {
             if (disposed || !component) return;
             componentRef.current = component as StructureComponent;
@@ -98,7 +99,9 @@ export default function StructureViewer({
       })
       .catch(() => {
         if (!disposed) {
-          setError('Unable to initialize WebGL 3D structure viewer. Download the PDB file instead.');
+          setError(
+            `Unable to initialize WebGL 3D structure viewer. Download the ${coordFormat.toUpperCase()} file instead.`,
+          );
         }
       });
 
@@ -115,7 +118,7 @@ export default function StructureViewer({
       stageRef.current = null;
       componentRef.current = null;
     };
-  }, [pdb]);
+  }, [pdb, coordFormat]);
 
   useEffect(() => {
     if (!ready || !componentRef.current) return;
@@ -244,10 +247,15 @@ export default function StructureViewer({
             type="button"
             className="btn-tomato text-xs !py-2 !px-3"
             onClick={() =>
-              triggerDownload(new Blob([pdb], { type: 'chemical/x-pdb' }), `${safeFilename}.pdb`)
+              triggerDownload(
+                new Blob([pdb], {
+                  type: coordFormat === 'cif' ? 'chemical/x-cif' : 'chemical/x-pdb',
+                }),
+                `${safeFilename}.${coordFormat}`,
+              )
             }
           >
-            Download PDB
+            Download {coordFormat.toUpperCase()}
           </button>
         </div>
       </div>

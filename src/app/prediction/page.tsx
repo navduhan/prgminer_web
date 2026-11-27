@@ -713,7 +713,7 @@ function PredictionWorkbenchInner() {
                 <div className="flex items-baseline justify-between gap-3 px-3.5 py-2">
                   <dt className="text-[var(--muted)]">Structural suite</dt>
                   <dd className="text-right font-semibold text-[var(--ink)]">
-                    S4PRED 2D + ESMFold / SWISS-MODEL 3D
+                    S4PRED 2D + ESMFold 3D (&le;400 aa)
                   </dd>
                 </div>
                 <div className="flex items-baseline justify-between gap-3 px-3.5 py-2">

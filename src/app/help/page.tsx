@@ -54,8 +54,8 @@ const FAQ_ITEMS = [
     defaultOpen: false,
   },
   {
-    q: 'Why does 3D structure modeling switch between ESMFold and SWISS-MODEL?',
-    a: 'Single-sequence ESMFold atomic inference is optimal and rapid for compact immune domains up to 400 residues (such as standalone TIR sensors and cytoplasmic KIN decoys). Canonical multi-domain NLRs and receptor kinases (typically 650–1,400 aa) automatically route to SWISS-MODEL homology modeling for full-length template coordinates and QMEANDisCo quality metrics.',
+    q: 'Why is in-browser 3D folding limited to proteins up to 400 amino acids?',
+    a: 'PRGminer uses single-sequence ESMFold atomic inference for rapid in-browser 3D coordinate generation (~5–20s), which supports compact immune proteins and standalone domains up to 400 residues (such as TIR sensors, KIN decoys, or excised NB-ARC/kinase domains). For full-length multi-domain NLRs and receptor kinases (>400 aa), PRGminer computes full-length S4PRED 2D topology locally and provides one-click FASTA handoff to AlphaFold Server and SWISS-MODEL.',
     defaultOpen: false,
   },
   {
@@ -154,7 +154,7 @@ export default function HelpPage() {
         <p className="mt-2.5 max-w-3xl text-sm leading-relaxed text-[var(--muted)]">
           Reference protocols for formatting protein FASTA inputs, operating the two-phase Dipeptide
           Composition CNN cascade, auditing softmax class probabilities, inspecting S4PRED 2D and
-          ESMFold / SWISS-MODEL 3D structures, and citing PRGminer.
+          ESMFold 3D (&le;400 aa) structures, and citing PRGminer.
         </p>
       </header>
 
@@ -248,7 +248,7 @@ export default function HelpPage() {
                   <p className="text-xs leading-relaxed text-[var(--muted)]">
                     Bookmark your tokenized 30-day result URL, export TSV/CSV/JSON or per-class{' '}
                     <code className="font-mono text-[var(--ink)]">.fasta</code> subsets, and launch
-                    S4PRED secondary topology and ESMFold / SWISS-MODEL 3D viewers.
+                    S4PRED 2D secondary topology and ESMFold 3D (&le;400 aa) viewers.
                   </p>
                 </div>
               </div>
@@ -548,7 +548,7 @@ export default function HelpPage() {
                     On-Demand 2D Topology &amp; 3D Structure Modeling
                   </h2>
                   <span className="font-mono text-[11px] font-semibold text-[var(--muted)]">
-                    S4PRED · ESMFold · SWISS-MODEL
+                    S4PRED 2D · ESMFold 3D (&le;400 aa)
                   </span>
                 </div>
 
@@ -587,23 +587,20 @@ export default function HelpPage() {
 
                   <div className="space-y-2 p-5">
                     <p className="font-mono text-xs font-extrabold text-[var(--steel)]">
-                      3D HOMOLOGY · SWISS-MODEL (&gt; 400 AA)
+                      FULL-LENGTH RECEPTORS (&gt; 400 AA)
                     </p>
                     <h3 className="font-semibold text-sm text-[var(--ink)]">
-                      Full-length multi-domain receptors
+                      2D topology &amp; external 3D handoff
                     </h3>
                     <p className="text-xs leading-relaxed text-[var(--muted)]">
-                      Large <code className="font-mono text-[var(--ink)]">CNL</code>,{' '}
+                      Multi-domain <code className="font-mono text-[var(--ink)]">CNL</code>,{' '}
                       <code className="font-mono text-[var(--ink)]">TNL</code>,{' '}
                       <code className="font-mono text-[var(--ink)]">RLK</code>,{' '}
                       <code className="font-mono text-[var(--ink)]">RLP</code>,{' '}
                       <code className="font-mono text-[var(--ink)]">LECRK</code>, and{' '}
-                      <code className="font-mono text-[var(--ink)]">LYK</code> proteins (&gt;400 aa)
-                      route to SWISS-MODEL comparative modeling with interactive 3D highlighting for{' '}
-                      <code className="font-mono text-[var(--ink)]">P-loop</code>,{' '}
-                      <code className="font-mono text-[var(--ink)]">Kinase-2</code>,{' '}
-                      <code className="font-mono text-[var(--ink)]">MHD</code>, and{' '}
-                      <code className="font-mono text-[var(--ink)]">EDVID</code> motifs.
+                      <code className="font-mono text-[var(--ink)]">LYK</code> receptors (&gt;400
+                      aa) display a clear sequence-length notice with one-click full-length S4PRED
+                      2D topology and direct FASTA handoff to AlphaFold Server and SWISS-MODEL.
                     </p>
                   </div>
                 </div>

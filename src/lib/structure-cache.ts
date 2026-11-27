@@ -3,18 +3,20 @@ import fs from 'fs/promises';
 import path from 'path';
 import { PREDICTION_CONFIG } from './config';
 import { parseJobFastaMap } from './prediction-jobs';
+import { ESMFOLD_MAX_RESIDUES, StructurePending } from './structure';
 
 export type StructureKind = 'secondary' | 'tertiary';
+
 const LOCK_STALE_MS = 15 * 60 * 1000;
 const pending = new Map<string, Promise<unknown>>();
 const validJobId = /^[a-z0-9_-]+$/i;
 
-const directory = (jobId: string) => {
+export const structureDir = (jobId: string) => {
   if (!validJobId.test(jobId)) throw new Error('Invalid job identifier.');
   return path.join(PREDICTION_CONFIG.jobDir, jobId, 'structures');
 };
 
-const digest = (sequence: string) =>
+export const structureDigest = (sequence: string) =>
   crypto.createHash('sha256').update(sequence).digest('hex').slice(0, 24);
 
 async function expireLock(lockPath: string) {
@@ -28,15 +30,28 @@ async function expireLock(lockPath: string) {
   }
 }
 
+export async function clearStructureFailure(
+  jobId: string,
+  sequence: string,
+  kind: StructureKind,
+) {
+  const dir = structureDir(jobId);
+  const hash = structureDigest(sequence);
+  await fs.unlink(path.join(dir, `${hash}.${kind}.error.json`)).catch(() => {});
+}
+
 export async function cachedStructure<T>(
   jobId: string,
   sequence: string,
   kind: StructureKind,
   predict: () => Promise<T>,
 ): Promise<T> {
-  const dir = directory(jobId);
+  const dir = structureDir(jobId);
   await fs.mkdir(dir, { recursive: true, mode: 0o700 });
-  const target = path.join(dir, `${digest(sequence)}.${kind}.json`);
+  const hash = structureDigest(sequence);
+  const target = path.join(dir, `${hash}.${kind}.json`);
+  const errorFile = path.join(dir, `${hash}.${kind}.error.json`);
+
   try {
     return JSON.parse(await fs.readFile(target, 'utf8')) as T;
   } catch (error) {
@@ -45,6 +60,13 @@ export async function cachedStructure<T>(
 
   const existing = pending.get(target);
   if (existing) return (await existing) as T;
+
+  try {
+    const savedError = JSON.parse(await fs.readFile(errorFile, 'utf8')) as { error?: string };
+    if (savedError.error) throw new Error(savedError.error);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+  }
 
   const lock = `${target}.lock`;
   await expireLock(lock);
@@ -56,7 +78,10 @@ export async function cachedStructure<T>(
       await handle.close();
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === 'EEXIST') {
-        throw new Error('This structure is already being predicted. Please check again shortly.');
+        throw new StructurePending(
+          'Structure prediction is already running. This page will update automatically.',
+          kind === 'secondary' ? 'S4PRED' : 'ESMFold',
+        );
       }
       throw error;
     }
@@ -65,7 +90,20 @@ export async function cachedStructure<T>(
       const temp = `${target}.${randomUUID()}.tmp`;
       await fs.writeFile(temp, JSON.stringify(value), { mode: 0o600 });
       await fs.rename(temp, target);
+      await fs.unlink(errorFile).catch(() => {});
       return value;
+    } catch (error) {
+      if (!(error instanceof StructurePending)) {
+        const msg = error instanceof Error ? error.message : 'Structure prediction failed.';
+        const tempErr = `${errorFile}.${randomUUID()}.tmp`;
+        await fs
+          .writeFile(tempErr, JSON.stringify({ error: msg, updatedAt: new Date().toISOString() }), {
+            mode: 0o600,
+          })
+          .then(() => fs.rename(tempErr, errorFile))
+          .catch(() => {});
+      }
+      throw error;
     } finally {
       await fs.unlink(lock).catch(() => {});
     }
@@ -80,7 +118,7 @@ export async function cachedStructure<T>(
 }
 
 export async function structureStatus(jobId: string) {
-  const dir = directory(jobId);
+  const dir = structureDir(jobId);
   const entries = new Set(
     await fs.readdir(dir).catch((error: NodeJS.ErrnoException) => {
       if (error.code === 'ENOENT') return [];
@@ -101,14 +139,26 @@ export async function structureStatus(jobId: string) {
   const fastaMap = await parseJobFastaMap(jobId);
   const result: Record<string, { secondary: string; tertiary: string }> = {};
   for (const [id, entry] of fastaMap.entries()) {
-    const hash = digest(entry.sequence.replace(/X/g, ''));
-    const state = (kind: StructureKind) =>
-      entries.has(`${hash}.${kind}.json`)
-        ? 'ready'
-        : entries.has(`${hash}.${kind}.json.lock`)
+    const cleaned = entry.sequence.replace(/X/g, '');
+    const hash = structureDigest(cleaned);
+    const secondary = entries.has(`${hash}.secondary.json`)
+      ? 'ready'
+      : entries.has(`${hash}.secondary.error.json`)
+        ? 'failed'
+        : entries.has(`${hash}.secondary.json.lock`)
           ? 'running'
           : 'missing';
-    result[id] = { secondary: state('secondary'), tertiary: state('tertiary') };
+    const tertiary =
+      cleaned.length > ESMFOLD_MAX_RESIDUES
+        ? 'unsupported'
+        : entries.has(`${hash}.tertiary.json`)
+          ? 'ready'
+          : entries.has(`${hash}.tertiary.error.json`)
+            ? 'failed'
+            : entries.has(`${hash}.tertiary.json.lock`)
+              ? 'running'
+              : 'missing';
+    result[id] = { secondary, tertiary };
   }
   return result;
 }
