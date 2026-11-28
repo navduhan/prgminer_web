@@ -37,19 +37,19 @@ export default function DomainSchematic({
 
   return (
     <div className="w-full">
-      <div className="mb-1 flex items-center justify-between font-mono text-[11px] text-[var(--muted)]">
+      <div className="mb-1.5 flex items-center justify-between font-mono text-[13px] font-semibold text-[var(--ink-secondary)]">
         <span>NH₂ (N-term)</span>
-        <span className="font-semibold text-[var(--navy)]">{compartment}</span>
+        <span className="font-bold text-[var(--navy)]">{compartment}</span>
         <span>COOH (C-term)</span>
       </div>
       <svg
         viewBox={`0 0 560 ${height}`}
-        className="w-full block select-none border-y border-[var(--line)] bg-white"
+        className="w-full block select-none rounded-xl border border-[var(--line-strong)] bg-white"
         role="img"
         aria-label={`Protein domain schematic: ${domains.map((d) => d.code).join(' – ')}`}
       >
         {/* Polypeptide backbone */}
-        <line x1="12" y1={midY} x2="548" y2={midY} stroke="#94a3b8" strokeWidth="2.5" />
+        <line x1="12" y1={midY} x2="548" y2={midY} stroke="#5c7087" strokeWidth="2.5" />
         <circle cx="12" cy={midY} r="3.5" fill="#0f2744" />
         <circle cx="548" cy={midY} r="3.5" fill="#d93829" />
 
@@ -91,7 +91,7 @@ export default function DomainSchematic({
           }
 
           if (tone === 'tm') {
-            // Sharp transmembrane bilayer anchor block
+            // Transmembrane bilayer anchor block
             return (
               <g key={`${code}-${i}`}>
                 <rect
@@ -99,7 +99,7 @@ export default function DomainSchematic({
                   y={midY - 15}
                   width={w}
                   height={30}
-                  rx="2"
+                  rx="4"
                   fill="#0f2744"
                 />
                 <text
@@ -141,7 +141,7 @@ export default function DomainSchematic({
                     y={height - 5}
                     textAnchor="middle"
                     fontSize="9.5"
-                    fill="#526275"
+                    fill="#152840"
                   >
                     {label}
                   </text>
@@ -276,7 +276,7 @@ export default function DomainSchematic({
                   y={height - 5}
                   textAnchor="middle"
                   fontSize="9.5"
-                  fill="#526275"
+                  fill="#152840"
                 >
                   {label}
                 </text>

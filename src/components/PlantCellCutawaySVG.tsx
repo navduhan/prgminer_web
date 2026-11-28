@@ -66,13 +66,13 @@ export default function PlantCellCutawaySVG({
       </defs>
 
       {/* Compartments annotation */}
-      <text x="24" y="28" fontSize="11" fontWeight="800" fill="#64748b" fontFamily="ui-monospace, monospace">
+      <text x="24" y="28" fontSize="12" fontWeight="800" fill={NAVY} fontFamily="ui-monospace, monospace">
         EXTRACELLULAR APOPLAST &amp; CELL WALL
       </text>
-      <text x="24" y="376" fontSize="11" fontWeight="800" fill="#64748b" fontFamily="ui-monospace, monospace">
+      <text x="24" y="376" fontSize="12" fontWeight="800" fill={NAVY} fontFamily="ui-monospace, monospace">
         PLANT CYTOPLASM (INTRACELLULAR IMMUNE COMPLEXES)
       </text>
-      <text x="852" y="28" fontSize="11" fontWeight="700" fill={TOMATO} fontFamily="ui-monospace, monospace">
+      <text x="840" y="28" fontSize="12" fontWeight="700" fill={TOMATO} fontFamily="ui-monospace, monospace">
         ● PATHOGEN PAMPs &amp; EFFECTORS
       </text>
 
@@ -122,7 +122,7 @@ export default function PlantCellCutawaySVG({
               y1={yOut.toFixed(1)}
               x2={xmOut.toFixed(1)}
               y2={ymOut.toFixed(1)}
-              stroke="#64748b"
+              stroke={STEEL}
               strokeWidth="1.15"
             />
             <line
@@ -130,7 +130,7 @@ export default function PlantCellCutawaySVG({
               y1={yIn.toFixed(1)}
               x2={xmIn.toFixed(1)}
               y2={ymIn.toFixed(1)}
-              stroke="#64748b"
+              stroke={STEEL}
               strokeWidth="1.15"
             />
             <circle
@@ -209,7 +209,7 @@ export default function PlantCellCutawaySVG({
             y="84"
             width="48"
             height="20"
-            rx="2"
+            rx="5"
             fill={isSel('rlk') ? TOMATO : '#ffffff'}
             stroke={stroke('rlk')}
             strokeWidth="1.5"
@@ -287,7 +287,7 @@ export default function PlantCellCutawaySVG({
             y="84"
             width="60"
             height="20"
-            rx="2"
+            rx="5"
             fill={isSel('lecrk') ? TOMATO : '#ffffff'}
             stroke={stroke('lecrk')}
             strokeWidth="1.5"
@@ -355,7 +355,7 @@ export default function PlantCellCutawaySVG({
             y="84"
             width="48"
             height="20"
-            rx="2"
+            rx="5"
             fill={isSel('lyk') ? TOMATO : '#ffffff'}
             stroke={stroke('lyk')}
             strokeWidth="1.5"
@@ -378,7 +378,7 @@ export default function PlantCellCutawaySVG({
       <g
         onClick={() => onSelect('rlp')}
         className="svg-receptor"
-        transform="translate(758, 236) rotate(27)"
+        transform="translate(772, 230) rotate(27)"
         role="button"
         tabIndex={0}
         aria-label="RLP: Receptor-like protein lacking cytoplasmic kinase"
@@ -396,7 +396,7 @@ export default function PlantCellCutawaySVG({
           strokeWidth="1.6"
           markerEnd="url(#elicitor-arrow)"
         />
-        <line x1="0" y1="-20" x2="0" y2="44" stroke={stroke('rlp')} strokeWidth="5.5" />
+        <line x1="0" y1="-20" x2="0" y2="40" stroke={stroke('rlp')} strokeWidth="5.5" />
         <polyline
           points="0,-20 -10,-30 10,-40 -10,-50 10,-60 -10,-70 9,-80"
           fill="none"
@@ -406,21 +406,21 @@ export default function PlantCellCutawaySVG({
         />
         <polygon points="0,-94 10,-83 -8,-82" fill={TOMATO} />
         {/* Short cytoplasmic tail (no kinase) */}
-        <circle cx="0" cy="48" r="5" fill={TOMATO} />
-        <g transform="rotate(-27 0 74)">
+        <circle cx="0" cy="44" r="5" fill={TOMATO} />
+        <g transform="rotate(-27 0 64)">
           <rect
             x="-24"
-            y="62"
+            y="52"
             width="48"
             height="20"
-            rx="2"
+            rx="5"
             fill={isSel('rlp') ? TOMATO : '#ffffff'}
             stroke={stroke('rlp')}
             strokeWidth="1.5"
           />
           <text
             x="0"
-            y="76"
+            y="66"
             textAnchor="middle"
             fontSize="12"
             fontWeight="800"
@@ -485,7 +485,7 @@ export default function PlantCellCutawaySVG({
           y="-11"
           width="52"
           height="22"
-          rx="2"
+          rx="5"
           fill={isSel('cnl') ? TOMATO : '#ffffff'}
           stroke={stroke('cnl')}
           strokeWidth="1.5"
@@ -533,7 +533,7 @@ export default function PlantCellCutawaySVG({
           y="-11"
           width="52"
           height="22"
-          rx="2"
+          rx="5"
           fill={isSel('tnl') ? TOMATO : '#ffffff'}
           stroke={stroke('tnl')}
           strokeWidth="1.5"
@@ -587,7 +587,7 @@ export default function PlantCellCutawaySVG({
           y="21"
           width="48"
           height="20"
-          rx="2"
+          rx="5"
           fill={isSel('tir') ? TOMATO : '#ffffff'}
           stroke={stroke('tir')}
           strokeWidth="1.5"
@@ -637,7 +637,7 @@ export default function PlantCellCutawaySVG({
           y="21"
           width="48"
           height="20"
-          rx="2"
+          rx="5"
           fill={isSel('kin') ? TOMATO : '#ffffff'}
           stroke={stroke('kin')}
           strokeWidth="1.5"

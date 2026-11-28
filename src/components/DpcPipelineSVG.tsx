@@ -83,12 +83,12 @@ export default function DpcPipelineSVG({
         x="84"
         y="240"
         textAnchor="middle"
-        fontSize="10"
+        fontSize="11.5"
         fontWeight="800"
-        fill="#526275"
+        fill={NAVY}
         fontFamily="ui-monospace, monospace"
       >
-        PROTEOME FASTA
+        PROTEIN FASTA
       </text>
 
       {/* Center-Left: 20x20 = 400 Dipeptide Composition Matrix */}
@@ -110,6 +110,7 @@ export default function DpcPipelineSVG({
               y={(gy + r * cellSize).toFixed(1)}
               width={(cellSize - 1.5).toFixed(1)}
               height={(cellSize - 1.5).toFixed(1)}
+              rx="1.5"
               fill={fill}
             />
           );
@@ -119,9 +120,9 @@ export default function DpcPipelineSVG({
         x={gx + (gridDim * cellSize) / 2}
         y="240"
         textAnchor="middle"
-        fontSize="10"
+        fontSize="11.5"
         fontWeight="800"
-        fill="#526275"
+        fill={NAVY}
         fontFamily="ui-monospace, monospace"
       >
         20×20 DPC TENSOR (400-D)
@@ -131,22 +132,22 @@ export default function DpcPipelineSVG({
       <rect
         x="408"
         y="28"
-        width="22"
+        width="24"
         height="178"
-        rx="2"
+        rx="6"
         fill={NAVY}
       />
       <text
-        x="419"
+        x="420"
         y="117"
         textAnchor="middle"
-        fontSize="9.5"
+        fontSize="10.5"
         fontWeight="800"
         fill="#ffffff"
         fontFamily="ui-monospace, monospace"
-        transform="rotate(-90 419 117)"
+        transform="rotate(-90 420 117)"
       >
-        PHASE I CNN (98.75%)
+        PHASE I · R-GENE SCREEN
       </text>
 
       {/* Short connectors from DPC Matrix -> Phase I Gate */}
@@ -275,7 +276,7 @@ export default function DpcPipelineSVG({
               <text
                 x="694"
                 y="4"
-                fontSize="11.5"
+                fontSize="12"
                 fontWeight="800"
                 fill={active ? TOMATO : NAVY}
                 fontFamily="ui-monospace, monospace"
@@ -291,12 +292,12 @@ export default function DpcPipelineSVG({
         x="590"
         y="240"
         textAnchor="middle"
-        fontSize="10"
+        fontSize="11.5"
         fontWeight="800"
-        fill="#526275"
+        fill={NAVY}
         fontFamily="ui-monospace, monospace"
       >
-        PHASE II · 8 R-GENE ARCHITECTURES (97.55%)
+        PHASE II · 8 R-GENE FAMILIES
       </text>
     </svg>
   );

@@ -1,7 +1,7 @@
 {
   "name": "prgminer_web",
   "version": "1.0.0",
-  "description": "PRGminer secure web application and HPC plant resistance gene prediction gateway",
+  "description": "PRGminer web server for plant resistance gene prediction and classification",
   "author": "Naveen Duhan",
   "license": "GPL-3.0-or-later",
   "private": true,
@@ -9,7 +9,7 @@
     "dev": "next dev --webpack -p 3008",
     "build": "next build --webpack",
     "start": "next start -p 3008",
-    "lint": "eslint",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

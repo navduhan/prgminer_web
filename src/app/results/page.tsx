@@ -105,7 +105,7 @@ export default function ResultsPage() {
       const parsed = readJobBookmark();
       if (!parsed) {
         setError(
-          'No private job token was found in this URL. Submit a prediction job or open your saved bookmark link.',
+          'No private job token was found in this URL. Submit a prediction job or open your saved link.',
         );
         return;
       }
@@ -203,7 +203,7 @@ export default function ResultsPage() {
     [columns],
   );
 
-  // Summary ledger counts
+  // Summary counts
   const rGeneCount = useMemo(
     () => phase1Rows.filter((r) => String(r.Prediction) === 'Rgene').length,
     [phase1Rows],
@@ -324,17 +324,17 @@ export default function ResultsPage() {
   if (error && !job) {
     return (
       <div className="py-10">
-        <div className="mx-auto max-w-2xl space-y-4 border border-[var(--line)] border-t-2 border-t-[var(--tomato)] bg-white p-8">
-          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--tomato)]">
+        <div className="mx-auto max-w-2xl space-y-4 rounded-2xl border border-[var(--line-strong)] bg-white p-6 sm:p-8">
+          <p className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--tomato)]">
             Results Lookup
           </p>
-          <h1 className="font-display text-2xl font-semibold text-[var(--navy)]">
+          <h1 className="font-display text-2xl font-bold text-[var(--navy)]">
             Unable to open prediction results
           </h1>
-          <p className="text-sm text-[var(--muted)]">{error}</p>
+          <p className="text-[15px] leading-relaxed text-[var(--ink-secondary)]">{error}</p>
           <Link href="/prediction" className="btn-navy mt-2">
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            <span>Return to Prediction Workbench</span>
+            <span>Back to Predict</span>
           </Link>
         </div>
       </div>
@@ -347,20 +347,20 @@ export default function ResultsPage() {
         <div
           role="status"
           aria-live="polite"
-          className="mx-auto max-w-2xl space-y-4 border border-[var(--line)] border-t-2 border-t-[var(--navy)] bg-[var(--surface)] p-8 text-center"
+          className="mx-auto max-w-2xl space-y-4 rounded-2xl border border-[var(--line-strong)] bg-[var(--surface)] p-8 text-center"
         >
           <Loader2
             className="mx-auto h-7 w-7 animate-spin text-[var(--tomato)]"
             aria-hidden="true"
           />
-          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--navy)]">
-            PRGminer Analysis in Progress
+          <p className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--navy)]">
+            Prediction in Progress
           </p>
-          <h1 className="font-display text-2xl font-semibold text-[var(--navy)]">
+          <h1 className="font-display text-2xl font-bold text-[var(--navy)]">
             {job?.message || 'Loading your PRGminer prediction job…'}
           </h1>
           {job?.jobId ? (
-            <p className="font-mono text-xs text-[var(--muted)]">Job ID: {job.jobId}</p>
+            <p className="font-mono text-sm text-[var(--ink-secondary)]">Job ID: {job.jobId}</p>
           ) : null}
         </div>
       </div>
@@ -372,18 +372,18 @@ export default function ResultsPage() {
       <div className="py-10">
         <div
           role="alert"
-          className="mx-auto max-w-2xl space-y-4 border border-[var(--line)] border-t-2 border-t-[var(--danger)] bg-white p-8"
+          className="mx-auto max-w-2xl space-y-4 rounded-2xl border border-[var(--line-strong)] bg-white p-6 sm:p-8"
         >
-          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--danger)]">
+          <p className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--danger)]">
             Prediction Job Failed
           </p>
-          <h1 className="font-display text-2xl font-semibold text-[var(--navy)]">{job.message}</h1>
-          <p className="rounded-[2px] border border-[var(--tomato-border)] bg-[var(--danger-soft)] p-4 font-mono text-xs text-[var(--danger)]">
+          <h1 className="font-display text-2xl font-bold text-[var(--navy)]">{job.message}</h1>
+          <p className="rounded-xl border border-[var(--tomato-border)] bg-[var(--danger-soft)] p-4 font-mono text-sm text-[var(--danger)]">
             {job.error || 'Unknown execution error.'}
           </p>
           <Link href="/prediction" className="btn-tomato">
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            <span>Start New Prediction</span>
+            <span>New Prediction</span>
           </Link>
         </div>
       </div>
@@ -391,17 +391,14 @@ export default function ResultsPage() {
   }
 
   return (
-    <div className="space-y-6 py-5 sm:py-8">
-      {/* Flat Header Bar */}
-      <header className="flex flex-col gap-4 border-b border-[var(--line)] pb-5 sm:flex-row sm:items-end sm:justify-between">
+    <div className="space-y-6 py-6 pb-10">
+      {/* Header Bar */}
+      <header className="flex flex-col gap-4 border-b border-[var(--line-strong)] pb-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--tomato)]">
-            PRGminer Screening Dossier
-          </p>
-          <h1 className="mt-1 font-display text-2xl font-semibold text-[var(--navy)] sm:text-3xl">
-            Plant R-gene prediction &amp; architectural results
+          <h1 className="font-display text-2xl font-bold tracking-tight text-[var(--navy)] sm:text-[1.68rem]">
+            PRGminer Prediction Results
           </h1>
-          <p className="mt-1.5 font-mono text-xs text-[var(--muted)]">
+          <p className="mt-1 font-mono text-sm font-medium text-[var(--ink-secondary)]">
             Job {job.jobId} · Retained until {expiresAt(job.createdAt).toLocaleDateString()}
           </p>
         </div>
@@ -415,22 +412,22 @@ export default function ResultsPage() {
                 setCopiedLink(true);
                 setTimeout(() => setCopiedLink(false), 2000);
               }}
-              className="btn-outline-sharp text-xs !py-2 !px-3.5"
+              className="btn-outline-sharp py-2 px-4 text-sm"
             >
               {copiedLink ? (
                 <>
-                  <Check className="h-3.5 w-3.5 text-[var(--tomato)]" aria-hidden="true" />
-                  <span>Copied Bookmark URL</span>
+                  <Check className="h-4 w-4 text-[var(--tomato)]" aria-hidden="true" />
+                  <span>Copied Link</span>
                 </>
               ) : (
                 <>
-                  <Bookmark className="h-3.5 w-3.5" aria-hidden="true" />
-                  <span>Copy Private Bookmark</span>
+                  <Bookmark className="h-4 w-4" aria-hidden="true" />
+                  <span>Copy Private Link</span>
                 </>
               )}
             </button>
           ) : null}
-          <Link href="/prediction" className="btn-tomato text-xs !py-2 !px-3.5">
+          <Link href="/prediction" className="btn-tomato py-2 px-4 text-sm">
             <span>New Prediction</span>
           </Link>
         </div>
@@ -439,71 +436,77 @@ export default function ResultsPage() {
       {error ? (
         <div
           role="alert"
-          className="flex items-start gap-2.5 rounded-[2px] border border-[var(--tomato-border)] border-l-4 border-l-[var(--danger)] bg-[var(--danger-soft)] px-4 py-3 text-sm font-medium text-[var(--danger)]"
+          className="flex items-start gap-2.5 rounded-xl border border-[var(--tomato-border)] bg-[var(--danger-soft)] px-4 py-3.5 text-sm font-semibold text-[var(--danger)]"
         >
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
           <span>{error}</span>
         </div>
       ) : null}
 
-      {/* 4-Column Architectural Metric Ledger */}
-      <section className="grid sm:grid-cols-4 border border-[var(--line)] border-t-2 border-t-[var(--navy)] divide-y sm:divide-y-0 sm:divide-x divide-[var(--line)] bg-white">
+      {/* 4-Column Summary Strip */}
+      <section className="grid divide-y divide-[var(--line)] overflow-hidden rounded-xl border border-[var(--line-strong)] bg-white sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-y-0">
         <div className="p-5">
-          <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--muted)]">
+          <p className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--ink-secondary)]">
             Proteins Screened
           </p>
-          <p className="mt-1.5 font-mono text-3xl font-bold tabular-nums text-[var(--ink)]">
+          <p className="mt-1 font-display text-3xl font-bold tabular-nums text-[var(--navy)]">
             {phase1Rows.length.toLocaleString()}
           </p>
-          <p className="mt-0.5 text-xs text-[var(--muted)]">Phase I DPC CNN input</p>
+          <p className="mt-0.5 text-sm font-medium text-[var(--ink-secondary)]">
+            Phase I DPC input
+          </p>
         </div>
 
         <div className="p-5">
-          <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--tomato)]">
+          <p className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--tomato)]">
             Candidate R-Genes
           </p>
-          <p className="mt-1.5 font-mono text-3xl font-bold tabular-nums text-[var(--tomato)]">
+          <p className="mt-1 font-display text-3xl font-bold tabular-nums text-[var(--tomato)]">
             {rGeneCount.toLocaleString()}
           </p>
-          <p className="mt-0.5 text-xs text-[var(--muted)]">
+          <p className="mt-0.5 text-sm font-medium text-[var(--ink-secondary)]">
             {phase1Rows.length ? ((rGeneCount / phase1Rows.length) * 100).toFixed(1) : '0.0'}% of
-            screened input
+            submitted sequences
           </p>
         </div>
 
         <div className="p-5">
-          <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--muted)]">
-            Non-R-Genes Filtered
+          <p className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--ink-secondary)]">
+            Non-R-Genes
           </p>
-          <p className="mt-1.5 font-mono text-3xl font-bold tabular-nums text-[var(--ink)]">
+          <p className="mt-1 font-display text-3xl font-bold tabular-nums text-[var(--navy)]">
             {nonRGeneCount.toLocaleString()}
           </p>
-          <p className="mt-0.5 text-xs text-[var(--muted)]">Background proteome</p>
+          <p className="mt-0.5 text-sm font-medium text-[var(--ink-secondary)]">
+            Background sequences
+          </p>
         </div>
 
         <div className="p-5">
-          <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--navy)]">
-            Dominant Family
+          <p className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--navy)]">
+            Top Predicted Class
           </p>
-          <p className="mt-1.5 font-mono text-2xl font-extrabold text-[var(--navy)]">
+          <p className="mt-1 font-display text-2xl font-extrabold text-[var(--navy)]">
             {classCounts[0]?.[0] || '—'}
           </p>
-          <p className="mt-0.5 text-xs text-[var(--muted)]">
-            {classCounts[0] ? `${classCounts[0][1]} sequence(s) in active view` : 'No predictions'}
+          <p className="mt-0.5 text-sm font-medium text-[var(--ink-secondary)]">
+            {classCounts[0]
+              ? `${classCounts[0][1]} ${classCounts[0][1] === 1 ? 'sequence' : 'sequences'} in view`
+              : 'No predictions'}
           </p>
         </div>
       </section>
 
-      {/* Flat Family Filter & .fasta Subset Export Bar */}
-      <section className="border border-[var(--line)] bg-[var(--surface)] p-4 sm:px-6">
+      {/* Family Filter & Subset FASTA Export Bar */}
+      <section className="rounded-xl border border-[var(--line-strong)] bg-[var(--surface)] p-4 sm:px-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--navy)]">
-              Family Filter &amp; Subset FASTA Export
+            <h2 className="text-base font-bold text-[var(--navy)]">
+              Family Filter &amp; FASTA Export
             </h2>
-            <p className="mt-0.5 text-xs text-[var(--muted)]">
-              Click a family code to filter rows, or click its download icon to export{' '}
-              <code className="font-mono text-[var(--ink)]">&lt;Class&gt;.fasta</code>.
+            <p className="mt-0.5 text-sm text-[var(--ink-secondary)]">
+              Select a family to filter the table, or click its download icon to save{' '}
+              <code className="font-mono font-semibold text-[var(--ink)]">&lt;Family&gt;.fasta</code>.
             </p>
           </div>
 
@@ -511,9 +514,9 @@ export default function ResultsPage() {
             <button
               type="button"
               onClick={() => exportClassFasta('ALL_RGENES')}
-              className="btn-navy text-xs !py-2 !px-3.5"
+              className="btn-navy py-2 px-4 text-sm"
             >
-              <Download className="h-3.5 w-3.5" aria-hidden="true" />
+              <Download className="h-4 w-4" aria-hidden="true" />
               <span>Download All R-Genes (.fasta)</span>
             </button>
           ) : null}
@@ -527,7 +530,7 @@ export default function ResultsPage() {
               setClassFilter('ALL');
               setPage(1);
             }}
-            className={`rounded-[2px] border px-3 py-1.5 font-mono text-xs font-bold transition ${
+            className={`cursor-pointer rounded-lg border px-3 py-1.5 font-mono text-[13px] font-bold transition ${
               classFilter === 'ALL'
                 ? 'border-[var(--navy)] bg-[var(--navy)] text-white'
                 : 'border-[var(--line-strong)] bg-white text-[var(--ink)] hover:border-[var(--navy)]'
@@ -541,7 +544,7 @@ export default function ResultsPage() {
             return (
               <div
                 key={cls}
-                className={`inline-flex items-stretch overflow-hidden rounded-[2px] border bg-white ${
+                className={`inline-flex items-stretch overflow-hidden rounded-lg border bg-white ${
                   active ? 'border-[var(--tomato)]' : 'border-[var(--line-strong)]'
                 }`}
               >
@@ -552,7 +555,7 @@ export default function ResultsPage() {
                     setClassFilter(active ? 'ALL' : cls);
                     setPage(1);
                   }}
-                  className={`px-3 py-1.5 font-mono text-xs font-bold transition ${
+                  className={`cursor-pointer px-3 py-1.5 font-mono text-[13px] font-bold transition ${
                     active
                       ? 'bg-[var(--tomato)] text-white'
                       : 'text-[var(--navy)] hover:bg-[var(--navy-soft)]'
@@ -566,7 +569,7 @@ export default function ResultsPage() {
                     title={`Download ${cls}.fasta`}
                     aria-label={`Download ${cls}.fasta`}
                     onClick={() => exportClassFasta(cls)}
-                    className="flex items-center justify-center border-l border-[var(--line)] px-2 text-[var(--muted)] transition hover:bg-[var(--tomato-soft)] hover:text-[var(--tomato)]"
+                    className="flex cursor-pointer items-center justify-center border-l border-[var(--line)] px-2.5 text-[var(--ink-secondary)] transition hover:bg-[var(--tomato-soft)] hover:text-[var(--tomato)]"
                   >
                     <Download className="h-3.5 w-3.5" aria-hidden="true" />
                   </button>
@@ -577,8 +580,8 @@ export default function ResultsPage() {
         </div>
       </section>
 
-      {/* Sharp Bordered Results Table Container */}
-      <section className="border border-[var(--line)] border-t-2 border-t-[var(--navy)] bg-white">
+      {/* Rounded Results Table Container */}
+      <section className="overflow-hidden rounded-2xl border border-[var(--line-strong)] bg-white">
         {/* Phase Tablist */}
         <div
           className="prg-tablist bg-[var(--surface)] px-4 sm:px-6"
@@ -598,7 +601,7 @@ export default function ResultsPage() {
               }}
               className="prg-tab"
             >
-              <span>Phase II · 8-Class Families ({phase2Rows.length})</span>
+              <span>Phase II · 8 R-Gene Families ({phase2Rows.length})</span>
             </button>
           ) : null}
 
@@ -632,7 +635,7 @@ export default function ResultsPage() {
               </label>
               <div className="relative">
                 <Search
-                  className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]"
+                  className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ink-secondary)]"
                   aria-hidden="true"
                 />
                 <input
@@ -648,29 +651,28 @@ export default function ResultsPage() {
                   autoCapitalize="none"
                   spellCheck={false}
                   placeholder="Search sequence ID or class…"
-                  className="w-full rounded-[3px] border border-[var(--field-border)] bg-white py-2 pl-9 pr-3 text-sm text-[var(--ink)]"
+                  className="prg-field !py-2 !pl-9 !pr-3 text-sm"
                 />
               </div>
             </search>
 
             <div className="flex flex-wrap items-center gap-2">
-              {/* Probability Rank Key */}
-              <div className="mr-1.5 flex flex-wrap items-center gap-2.5 text-xs font-semibold text-[var(--muted)]">
+              <div className="mr-1.5 flex flex-wrap items-center gap-2.5 text-sm font-semibold text-[var(--ink-secondary)]">
                 <span>Probability Rank:</span>
                 <span className="inline-flex items-center">
-                  <span className="prob-rank-badge bg-[#d93829]" aria-hidden="true">
+                  <span className="prob-rank-badge bg-[var(--tomato)]" aria-hidden="true">
                     1
                   </span>
                   <span className="text-[var(--ink)]">1st</span>
                 </span>
                 <span className="inline-flex items-center">
-                  <span className="prob-rank-badge bg-[#0f2744]" aria-hidden="true">
+                  <span className="prob-rank-badge bg-[var(--navy)]" aria-hidden="true">
                     2
                   </span>
                   <span className="text-[var(--ink)]">2nd</span>
                 </span>
                 <span className="inline-flex items-center">
-                  <span className="prob-rank-badge bg-[#4e6e88]" aria-hidden="true">
+                  <span className="prob-rank-badge bg-[var(--steel)]" aria-hidden="true">
                     3
                   </span>
                   <span className="text-[var(--ink)]">3rd</span>
@@ -682,9 +684,9 @@ export default function ResultsPage() {
                 onClick={() =>
                   saveBlob(toDelimited(filteredRows, '\t'), `${job.jobId}_${activePhase}.tsv`)
                 }
-                className="btn-ghost-rule text-xs !py-1.5 !px-2.5"
+                className="btn-ghost-rule py-1.5 px-3 text-sm"
               >
-                <FileSpreadsheet className="h-3.5 w-3.5" aria-hidden="true" />
+                <FileSpreadsheet className="h-4 w-4" aria-hidden="true" />
                 <span>TSV</span>
               </button>
               <button
@@ -696,9 +698,9 @@ export default function ResultsPage() {
                     'text/csv;charset=utf-8',
                   )
                 }
-                className="btn-ghost-rule text-xs !py-1.5 !px-2.5"
+                className="btn-ghost-rule py-1.5 px-3 text-sm"
               >
-                <Download className="h-3.5 w-3.5" aria-hidden="true" />
+                <Download className="h-4 w-4" aria-hidden="true" />
                 <span>CSV</span>
               </button>
               <button
@@ -710,9 +712,9 @@ export default function ResultsPage() {
                     'application/json',
                   )
                 }
-                className="btn-ghost-rule text-xs !py-1.5 !px-2.5"
+                className="btn-ghost-rule py-1.5 px-3 text-sm"
               >
-                <Download className="h-3.5 w-3.5" aria-hidden="true" />
+                <Download className="h-4 w-4" aria-hidden="true" />
                 <span>JSON</span>
               </button>
             </div>
@@ -725,7 +727,7 @@ export default function ResultsPage() {
             aria-labelledby="prgminer-results-caption"
             className="prg-table-region"
           >
-            <table className="prg-table prg-table-responsive text-left text-sm">
+            <table className="prg-table prg-table-responsive text-left text-[14.5px]">
               <caption id="prgminer-results-caption" className="sr-only">
                 {activePhase} R-gene prediction probabilities and structure actions
               </caption>
@@ -735,16 +737,16 @@ export default function ResultsPage() {
                     <th
                       key={col}
                       scope="col"
-                      className="border-b border-[var(--line)] px-4 py-3 font-mono text-[11px] font-extrabold uppercase tracking-wider text-[var(--navy)]"
+                      className="border-b border-[var(--line-strong)] px-4 py-3 font-mono text-xs font-extrabold uppercase tracking-wider text-[var(--navy)]"
                     >
                       {col === 'SampleID' ? 'Sequence ID' : col}
                     </th>
                   ))}
                   <th
                     scope="col"
-                    className="border-b border-[var(--line)] px-4 py-3 font-mono text-[11px] font-extrabold uppercase tracking-wider text-[var(--navy)]"
+                    className="border-b border-[var(--line-strong)] px-4 py-3 font-mono text-xs font-extrabold uppercase tracking-wider text-[var(--navy)]"
                   >
-                    Specimen &amp; Structure
+                    Structure
                   </th>
                 </tr>
               </thead>
@@ -753,7 +755,7 @@ export default function ResultsPage() {
                   <tr>
                     <td
                       colSpan={columns.length + 1}
-                      className="px-6 py-8 text-center text-xs text-[var(--muted)]"
+                      className="px-6 py-8 text-center text-[15px] text-[var(--ink-secondary)]"
                     >
                       No sequences match the active search or family filter.
                     </td>
@@ -776,7 +778,7 @@ export default function ResultsPage() {
                               <th
                                 key={col}
                                 scope="row"
-                                className="max-w-60 break-all border-b border-[var(--line)] px-4 py-3 font-mono text-xs font-bold text-[var(--navy)]"
+                                className="max-w-60 break-all border-b border-[var(--line)] px-4 py-3 font-mono text-[13.5px] font-bold text-[var(--navy)]"
                               >
                                 {sampleId}
                               </th>
@@ -791,10 +793,10 @@ export default function ResultsPage() {
                                 className="whitespace-nowrap border-b border-[var(--line)] px-4 py-3"
                               >
                                 <span
-                                  className={`inline-flex items-center rounded-[2px] border px-2 py-0.5 font-mono text-xs font-extrabold ${
+                                  className={`inline-flex items-center rounded-lg border px-2.5 py-0.5 font-mono text-xs font-extrabold ${
                                     isPositive
                                       ? 'border-[var(--tomato-border)] bg-[var(--tomato-soft)] text-[var(--tomato-dark)]'
-                                      : 'border-[var(--line)] bg-[var(--surface)] text-[var(--muted)]'
+                                      : 'border-[var(--line-strong)] bg-[var(--surface)] text-[var(--ink-secondary)]'
                                   }`}
                                 >
                                   {pred}
@@ -811,8 +813,10 @@ export default function ResultsPage() {
                             <td
                               key={col}
                               data-label={col}
-                              className={`whitespace-nowrap border-b border-[var(--line)] px-3.5 py-3 font-mono text-xs font-semibold tabular-nums ${
-                                rank ? `prob-rank prob-rank-${rank}` : 'text-[var(--muted)]'
+                              className={`whitespace-nowrap border-b border-[var(--line)] px-3.5 py-3 font-mono text-[13.5px] font-semibold tabular-nums ${
+                                rank
+                                  ? `prob-rank prob-rank-${rank} text-[var(--ink)]`
+                                  : 'text-[var(--ink-secondary)]'
                               }`}
                             >
                               {rank ? (
@@ -826,14 +830,14 @@ export default function ResultsPage() {
                         })}
 
                         <td
-                          data-label="Actions"
-                          className="whitespace-nowrap border-b border-[var(--line)] px-4 py-3 text-xs"
+                          data-label="Structure"
+                          className="whitespace-nowrap border-b border-[var(--line)] px-4 py-3 text-[13px]"
                         >
                           <div className="flex flex-wrap items-center gap-1.5">
                             <button
                               type="button"
                               onClick={() => openSequenceModal(row)}
-                              className="inline-flex items-center gap-1 rounded-[2px] border border-[var(--line-strong)] bg-white px-2 py-1 font-bold text-[var(--navy)] transition hover:border-[var(--navy)] hover:bg-[var(--navy-soft)]"
+                              className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-[var(--line-strong)] bg-white px-2.5 py-1.5 font-bold text-[var(--navy)] transition hover:border-[var(--navy)] hover:bg-[var(--navy-soft)]"
                             >
                               <Eye className="h-3.5 w-3.5" aria-hidden="true" />
                               <span>FASTA</span>
@@ -842,7 +846,7 @@ export default function ResultsPage() {
                             <button
                               type="button"
                               onClick={() => openStructure('secondary', sampleId)}
-                              className="rounded-[2px] border border-[var(--tomato-border)] bg-[var(--tomato-soft)] px-2 py-1 font-bold text-[var(--tomato-dark)] transition hover:border-[var(--tomato)]"
+                              className="cursor-pointer rounded-lg border border-[var(--tomato-border)] bg-[var(--tomato-soft)] px-2.5 py-1.5 font-bold text-[var(--tomato-dark)] transition hover:border-[var(--tomato)]"
                             >
                               {structState?.secondary === 'ready'
                                 ? 'View 2D'
@@ -855,11 +859,11 @@ export default function ResultsPage() {
                               type="button"
                               title={
                                 exceeds3DLimit
-                                  ? `${seqLength ? `${seqLength} aa — ` : ''}Direct ESMFold 3D folding is limited to ≤400 aa. Click for full-length modeling options.`
+                                  ? `${seqLength ? `${seqLength} aa — ` : ''}Direct ESMFold 3D folding supports sequences ≤400 aa. Click for modeling options.`
                                   : 'Predict or view 3D coordinates via ESMFold (≤400 aa)'
                               }
                               onClick={() => openStructure('tertiary', sampleId)}
-                              className={`rounded-[2px] border px-2 py-1 font-bold transition ${
+                              className={`cursor-pointer rounded-lg border px-2.5 py-1.5 font-bold transition ${
                                 exceeds3DLimit
                                   ? 'border-[var(--line-strong)] bg-white text-[var(--steel)] hover:border-[var(--navy)] hover:text-[var(--navy)]'
                                   : 'border-[var(--navy)] bg-[var(--navy-soft)] text-[var(--navy)] hover:bg-[var(--navy)] hover:text-white'
@@ -884,7 +888,7 @@ export default function ResultsPage() {
           </div>
 
           {/* Pagination Footer */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] bg-[var(--surface)] px-4 py-3.5 text-xs text-[var(--muted)] sm:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] bg-[var(--surface)] px-4 py-3.5 text-sm text-[var(--ink-secondary)] sm:px-6">
             <div>
               Showing{' '}
               <strong className="font-mono text-[var(--ink)]">
@@ -907,7 +911,7 @@ export default function ResultsPage() {
                   setPageSize(Number(e.target.value));
                   setPage(1);
                 }}
-                className="rounded-[2px] border border-[var(--field-border)] bg-white px-2 py-1 text-xs font-semibold text-[var(--ink)]"
+                className="rounded-lg border border-[var(--field-border)] bg-white px-2.5 py-1.5 text-sm font-semibold text-[var(--ink)]"
               >
                 {[15, 30, 50, 100].map((n) => (
                   <option key={n} value={n}>
@@ -920,7 +924,7 @@ export default function ResultsPage() {
                 type="button"
                 disabled={safePage <= 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
-                className="btn-ghost-rule !py-1 !px-2.5 text-xs"
+                className="btn-ghost-rule py-1.5 px-3 text-sm"
               >
                 Prev
               </button>
@@ -931,26 +935,26 @@ export default function ResultsPage() {
                 type="button"
                 disabled={safePage >= totalPages}
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                className="btn-ghost-rule !py-1 !px-2.5 text-xs"
+                className="btn-ghost-rule py-1.5 px-3 text-sm"
               >
                 Next
               </button>
             </div>
           </div>
 
-          {/* Phase II 8-Class Key */}
+          {/* Phase II Receptor Families Reference */}
           {activePhase === 'Phase2' && hasPhase2 ? (
             <div className="border-t border-[var(--line)] bg-white px-4 py-4 sm:px-6">
-              <p className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-[var(--navy)]">
-                Phase II 8-Class Architectural Key
+              <p className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--navy)]">
+                Phase II Receptor Families
               </p>
-              <dl className="mt-2.5 grid gap-x-6 gap-y-1.5 text-xs sm:grid-cols-2 lg:grid-cols-4">
+              <dl className="mt-2.5 grid gap-x-6 gap-y-1.5 text-sm sm:grid-cols-2 lg:grid-cols-4">
                 {PHASE2_CLASSES.map((code) => {
                   const info = RGENE_CLASS_MAP[code];
                   return (
                     <div key={code} className="flex items-baseline gap-2">
                       <dt className="font-mono font-extrabold text-[var(--tomato)]">{code}</dt>
-                      <dd className="truncate text-[var(--muted)]">{info?.name || code}</dd>
+                      <dd className="truncate text-[var(--ink-secondary)]">{info?.name || code}</dd>
                     </div>
                   );
                 })}
@@ -965,14 +969,14 @@ export default function ResultsPage() {
         ref={dialogRef}
         {...({ closedby: 'any' } as Record<string, string>)}
         aria-labelledby="seq-dialog-title"
-        className="m-auto w-full max-w-2xl rounded-[3px] border border-[var(--line)] border-t-[3px] border-t-[var(--navy)] bg-white p-0 text-[var(--ink)] shadow-xl"
+        className="m-auto w-full max-w-2xl overflow-hidden rounded-2xl border border-[var(--line-strong)] bg-white p-0 text-[var(--ink)] shadow-xl"
       >
         {inspectedSeq ? (
           <div>
             <div className="flex items-start justify-between gap-4 border-b border-[var(--line)] bg-[var(--surface)] px-6 py-4">
               <div>
-                <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--tomato)]">
-                  Sequence Specimen · {inspectedSeq.prediction}
+                <p className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--tomato)]">
+                  FASTA Sequence · {inspectedSeq.prediction}
                 </p>
                 <h1
                   id="seq-dialog-title"
@@ -985,7 +989,7 @@ export default function ResultsPage() {
                 <button
                   type="submit"
                   autoFocus
-                  className="btn-ghost-rule !py-1.5 !px-3 text-xs"
+                  className="btn-ghost-rule py-1.5 px-3.5 text-sm"
                 >
                   Close
                 </button>
@@ -1001,11 +1005,11 @@ export default function ResultsPage() {
                 />
               ) : null}
 
-              <pre className="max-h-72 overflow-auto rounded-[2px] border border-[var(--line)] bg-[var(--navy-dark)] p-4 font-mono text-xs leading-relaxed text-slate-100">
+              <pre className="max-h-72 overflow-auto rounded-xl border border-[var(--navy-dark)] bg-[var(--navy-dark)] p-4 font-mono text-[13.5px] leading-6 text-slate-100">
                 <code>{inspectedSeq.fasta}</code>
               </pre>
 
-              <div className="flex justify-end gap-2">
+              <div className="flex justify-end gap-2.5">
                 <button
                   type="button"
                   onClick={async () => {
@@ -1013,16 +1017,16 @@ export default function ResultsPage() {
                     setCopiedModalFasta(true);
                     setTimeout(() => setCopiedModalFasta(false), 1800);
                   }}
-                  className="btn-outline-sharp text-xs !py-2 !px-3"
+                  className="btn-outline-sharp py-2 px-3.5 text-sm"
                 >
                   {copiedModalFasta ? (
                     <>
-                      <Check className="h-3.5 w-3.5 text-[var(--tomato)]" aria-hidden="true" />
+                      <Check className="h-4 w-4 text-[var(--tomato)]" aria-hidden="true" />
                       <span>Copied FASTA</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+                      <Copy className="h-4 w-4" aria-hidden="true" />
                       <span>Copy FASTA</span>
                     </>
                   )}
@@ -1036,9 +1040,9 @@ export default function ResultsPage() {
                       'text/plain;charset=utf-8',
                     )
                   }
-                  className="btn-tomato text-xs !py-2 !px-3.5"
+                  className="btn-tomato py-2 px-4 text-sm"
                 >
-                  <Download className="h-3.5 w-3.5" aria-hidden="true" />
+                  <Download className="h-4 w-4" aria-hidden="true" />
                   <span>Download .fasta</span>
                 </button>
               </div>

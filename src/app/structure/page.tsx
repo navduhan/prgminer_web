@@ -200,21 +200,21 @@ export default function StructurePage() {
     info.kind === 'tertiary' && data?.status === 'unsupported_length';
 
   return (
-    <div className="space-y-6 py-5 sm:py-8">
-      <header className="flex flex-col gap-4 border-b border-[var(--line)] pb-5 sm:flex-row sm:items-end sm:justify-between">
+    <div className="space-y-6 py-6 pb-10">
+      <header className="flex flex-col gap-4 border-b border-[var(--line-strong)] pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <a href={backHref} className="btn-ghost-rule mb-3 text-xs !py-1.5 !px-3">
-            <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>Back to Results Dossier</span>
+          <a href={backHref} className="btn-ghost-rule mb-3 py-1.5 px-3.5 text-sm">
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            <span>Back to Results</span>
           </a>
-          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--tomato)]">
-            {info.kind === 'secondary' ? 'S4PRED Secondary Topology' : '3D Molecular Coordinates'}
+          <p className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--tomato)]">
+            {info.kind === 'secondary' ? 'S4PRED Secondary Structure' : 'ESMFold 3D Coordinates'}
           </p>
-          <h1 className="mt-1 break-all font-display text-2xl font-semibold text-[var(--navy)] sm:text-3xl">
-            {info.sample || 'R-gene protein structure'}
+          <h1 className="mt-1 break-all font-display text-2xl font-bold text-[var(--navy)] sm:text-3xl">
+            {info.sample || 'Protein structure'}
           </h1>
           {data && !isUnsupportedLength && data.method ? (
-            <p className="mt-1 font-mono text-xs font-semibold text-[var(--steel)]">
+            <p className="mt-1 font-mono text-sm font-semibold text-[var(--ink-secondary)]">
               Predicted via {data.method}
               {data.sequenceLength || data.sequence?.length
                 ? ` · ${(data.sequenceLength || data.sequence.length).toLocaleString()} aa`
@@ -226,7 +226,7 @@ export default function StructurePage() {
         {data && info.kind === 'secondary' ? (
           <button
             type="button"
-            className="btn-navy text-xs !py-2 !px-3.5"
+            className="btn-navy py-2 px-4 text-sm"
             onClick={() => {
               const blob = new Blob(
                 [
@@ -252,26 +252,26 @@ export default function StructurePage() {
         <div
           role="status"
           aria-live="polite"
-          className="border border-[var(--line)] border-t-2 border-t-[var(--navy)] bg-[var(--surface)] p-8 sm:p-10"
+          className="rounded-2xl border border-[var(--line-strong)] bg-[var(--surface)] p-8 sm:p-10"
         >
           <div className="mx-auto max-w-2xl space-y-3.5 text-center">
             <Loader2
               className="mx-auto h-7 w-7 animate-spin text-[var(--tomato)]"
               aria-hidden="true"
             />
-            <div className="inline-flex flex-wrap items-center justify-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--navy)]">
-              <span>Engine: {activeMethod}</span>
+            <div className="inline-flex flex-wrap items-center justify-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[var(--navy)]">
+              <span>Method: {activeMethod}</span>
               {progress.sequenceLength ? <span>· {progress.sequenceLength} aa</span> : null}
               <span className="inline-flex items-center gap-1 text-[var(--tomato)]">
                 <Clock className="h-3.5 w-3.5" aria-hidden="true" />
                 <span>{formatElapsed(elapsedSec)}</span>
               </span>
             </div>
-            <p className="font-display text-lg font-semibold text-[var(--navy)]">
+            <p className="font-display text-lg font-bold text-[var(--navy)]">
               {progress.message ||
                 (info.kind === 'secondary'
-                  ? 'Computing S4PRED single-sequence secondary structure…'
-                  : 'Predicting 3D atomic coordinates with ESMFold…')}
+                  ? 'Computing S4PRED secondary structure…'
+                  : 'Predicting 3D coordinates with ESMFold…')}
             </p>
           </div>
         </div>
@@ -280,9 +280,9 @@ export default function StructurePage() {
       {error ? (
         <div
           role="alert"
-          className="space-y-3 border border-[var(--tomato-border)] border-l-4 border-l-[var(--danger)] bg-[var(--danger-soft)] p-5"
+          className="space-y-3 rounded-xl border border-[var(--tomato-border)] bg-[var(--danger-soft)] p-5"
         >
-          <div className="flex items-start gap-2.5 text-sm font-semibold text-[var(--danger)]">
+          <div className="flex items-start gap-2.5 text-[15px] font-semibold text-[var(--danger)]">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
             <span>{error}</span>
           </div>
@@ -290,9 +290,9 @@ export default function StructurePage() {
             type="button"
             disabled={busy || !info.job}
             onClick={() => void loadStructure(true)}
-            className="btn-outline-sharp text-xs !py-1.5 !px-3"
+            className="btn-outline-sharp py-2 px-3.5 text-sm"
           >
-            <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
+            <RefreshCw className="h-4 w-4" aria-hidden="true" />
             <span>Retry Structure Prediction</span>
           </button>
         </div>
@@ -301,14 +301,14 @@ export default function StructurePage() {
       {isUnsupportedLength && data ? (
         <section
           aria-labelledby="large-protein-notice-heading"
-          className="border border-[var(--line)] border-t-2 border-t-[var(--navy)] bg-white"
+          className="overflow-hidden rounded-2xl border border-[var(--line-strong)] bg-white"
         >
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--line)] bg-[var(--surface)] px-6 py-3.5">
             <div className="flex items-center gap-2 font-mono text-xs font-extrabold uppercase tracking-wider text-[var(--navy)]">
               <Info className="h-4 w-4 text-[var(--tomato)]" aria-hidden="true" />
-              <span>Sequence Length Notice · Direct 3D Folding Limit</span>
+              <span>ESMFold 3D Length Limit</span>
             </div>
-            <span className="rounded-[2px] border border-[var(--line-strong)] bg-white px-2.5 py-0.5 font-mono text-xs font-bold text-[var(--navy)]">
+            <span className="rounded-lg border border-[var(--line-strong)] bg-white px-3 py-1 font-mono text-xs font-bold text-[var(--navy)]">
               {(data.sequenceLength || data.sequence.length).toLocaleString()} aa &gt;{' '}
               {data.maxResidues || 400} aa limit
             </span>
@@ -318,62 +318,53 @@ export default function StructurePage() {
             <div className="space-y-2">
               <h2
                 id="large-protein-notice-heading"
-                className="font-display text-xl font-semibold text-[var(--navy)]"
+                className="font-display text-xl font-bold text-[var(--navy)]"
               >
-                In-browser 3D folding is available for proteins up to {data.maxResidues || 400}{' '}
-                amino acids
+                In-browser 3D folding supports sequences up to {data.maxResidues || 400} amino acids
               </h2>
-              <p className="max-w-3xl text-sm leading-relaxed text-[var(--muted)]">
-                <strong className="font-mono text-[var(--ink)]">{data.sampleId}</strong> contains{' '}
+              <p className="max-w-3xl text-[15px] leading-relaxed text-[var(--ink-secondary)]">
+                <strong className="font-mono text-[var(--ink)]">{data.sampleId}</strong> is{' '}
                 <strong className="font-mono text-[var(--ink)]">
-                  {(data.sequenceLength || data.sequence.length).toLocaleString()} amino acids
+                  {(data.sequenceLength || data.sequence.length).toLocaleString()} aa
                 </strong>
-                . PRGminer performs rapid, single-sequence 3D folding via <strong>ESMFold</strong>,
-                which supports compact immune receptors and standalone domains up to{' '}
-                <strong>{data.maxResidues || 400} residues</strong> (such as standalone{' '}
-                <code className="font-mono text-[var(--ink)]">TIR</code> sensors, cytoplasmic{' '}
-                <code className="font-mono text-[var(--ink)]">KIN</code> decoys, or excised NB-ARC /
-                kinase domains). Full-length multi-domain plant R-genes (
-                <code className="font-mono text-[var(--ink)]">CNL</code>,{' '}
-                <code className="font-mono text-[var(--ink)]">TNL</code>,{' '}
-                <code className="font-mono text-[var(--ink)]">RLK</code>,{' '}
-                <code className="font-mono text-[var(--ink)]">RLP</code>,{' '}
-                <code className="font-mono text-[var(--ink)]">LECRK</code>,{' '}
-                <code className="font-mono text-[var(--ink)]">LYK</code>) exceed this single-chain
-                web folding limit.
+                . Direct ESMFold 3D folding handles sequences up to{' '}
+                <strong>{data.maxResidues || 400} aa</strong> (such as{' '}
+                <code className="font-mono font-bold text-[var(--ink)]">TIR</code> sensors,{' '}
+                <code className="font-mono font-bold text-[var(--ink)]">KIN</code> kinases, or
+                excised domains). For full-length multi-domain receptors, inspect S4PRED 2D topology
+                below or submit the FASTA sequence to AlphaFold Server or SWISS-MODEL.
               </p>
             </div>
 
-            {/* Recommended Actions */}
             <div className="grid gap-4 border-t border-[var(--line)] pt-5 md:grid-cols-2">
-              <div className="space-y-3 border border-[var(--line)] bg-[var(--surface)] p-4">
-                <p className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-[var(--tomato)]">
-                  01 · Built-In Full-Length 2D Topology
+              <div className="space-y-3 rounded-xl border border-[var(--line-strong)] bg-[var(--surface)] p-5">
+                <p className="font-mono text-xs font-extrabold uppercase tracking-wider text-[var(--tomato)]">
+                  01 · Full-Length 2D Topology
                 </p>
-                <p className="text-xs leading-relaxed text-[var(--muted)]">
-                  Inspect per-residue α-helix (<code className="font-mono">H</code>), β-strand (
-                  <code className="font-mono">E</code>), and coil (
-                  <code className="font-mono">C</code>) secondary structure across all{' '}
-                  {(data.sequenceLength || data.sequence.length).toLocaleString()} residues locally
-                  with <strong>S4PRED</strong> (no sequence length cap).
+                <p className="text-[14.5px] leading-relaxed text-[var(--ink-secondary)]">
+                  View per-residue α-helix (<code className="font-mono font-bold">H</code>),
+                  β-strand (<code className="font-mono font-bold">E</code>), and coil (
+                  <code className="font-mono font-bold">C</code>) states across all{' '}
+                  {(data.sequenceLength || data.sequence.length).toLocaleString()} residues with{' '}
+                  <strong>S4PRED</strong>.
                 </p>
                 <button
                   type="button"
                   onClick={switchToSecondary}
-                  className="btn-tomato text-xs !py-2 !px-3.5"
+                  className="btn-tomato py-2 px-4 text-sm"
                 >
-                  <Layers className="h-3.5 w-3.5" aria-hidden="true" />
-                  <span>Inspect 2D Secondary Structure (S4PRED)</span>
+                  <Layers className="h-4 w-4" aria-hidden="true" />
+                  <span>View 2D Structure (S4PRED)</span>
                 </button>
               </div>
 
-              <div className="space-y-3 border border-[var(--line)] bg-[var(--surface)] p-4">
-                <p className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-[var(--navy)]">
-                  02 · Full-Length 3D Modeling Suites
+              <div className="space-y-3 rounded-xl border border-[var(--line-strong)] bg-[var(--surface)] p-5">
+                <p className="font-mono text-xs font-extrabold uppercase tracking-wider text-[var(--navy)]">
+                  02 · External 3D Modeling
                 </p>
-                <p className="text-xs leading-relaxed text-[var(--muted)]">
-                  Copy this protein&apos;s FASTA sequence and submit it to dedicated multi-domain
-                  folding servers for full-length NLR / receptor-kinase 3D coordinates:
+                <p className="text-[14.5px] leading-relaxed text-[var(--ink-secondary)]">
+                  Copy this protein&apos;s FASTA sequence and open AlphaFold Server or SWISS-MODEL
+                  for full-length multi-domain 3D coordinates:
                 </p>
                 <div className="flex flex-wrap items-center gap-2">
                   {data.sequence ? (
@@ -385,16 +376,16 @@ export default function StructurePage() {
                         setCopiedFasta(true);
                         setTimeout(() => setCopiedFasta(false), 2000);
                       }}
-                      className="btn-navy text-xs !py-2 !px-3"
+                      className="btn-navy py-2 px-3.5 text-sm"
                     >
                       {copiedFasta ? (
                         <>
-                          <Check className="h-3.5 w-3.5 text-[var(--tomato)]" aria-hidden="true" />
+                          <Check className="h-4 w-4 text-[var(--tomato)]" aria-hidden="true" />
                           <span>Copied FASTA</span>
                         </>
                       ) : (
                         <>
-                          <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+                          <Copy className="h-4 w-4" aria-hidden="true" />
                           <span>Copy FASTA</span>
                         </>
                       )}
@@ -405,20 +396,20 @@ export default function StructurePage() {
                     href="https://alphafoldserver.com/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-outline-sharp text-xs !py-2 !px-3"
+                    className="btn-outline-sharp py-2 px-3.5 text-sm"
                   >
                     <span>AlphaFold Server</span>
-                    <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                    <ExternalLink className="h-4 w-4" aria-hidden="true" />
                   </a>
 
                   <a
                     href="https://swissmodel.expasy.org/interactive"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-outline-sharp text-xs !py-2 !px-3"
+                    className="btn-outline-sharp py-2 px-3.5 text-sm"
                   >
                     <span>SWISS-MODEL</span>
-                    <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                    <ExternalLink className="h-4 w-4" aria-hidden="true" />
                   </a>
                 </div>
               </div>

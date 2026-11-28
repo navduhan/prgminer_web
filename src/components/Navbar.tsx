@@ -8,10 +8,10 @@ import { useCallback, useEffect, useRef } from 'react';
 import { withBasePath } from '@/lib/base-path';
 
 const NAV_LINKS = [
-  { name: 'Cell Immunity Atlas', href: '/' },
-  { name: 'Analyze Sequences', href: '/prediction' },
-  { name: 'Standalone CLI', href: '/standalone' },
-  { name: 'Manual & Cite', href: '/help' },
+  { name: 'Overview', href: '/' },
+  { name: 'Predict', href: '/prediction' },
+  { name: 'CLI Package', href: '/standalone' },
+  { name: 'Guide', href: '/help' },
 ] as const;
 
 export default function Navbar() {
@@ -90,15 +90,18 @@ export default function Navbar() {
       >
         <div className="flex items-center gap-7 h-full">
           <Link href="/" className="flex items-center gap-2.5 text-white" aria-label="PRGminer home">
-            <span className="h-5 w-[3.5px] bg-[var(--tomato)]" aria-hidden="true" />
-            <span className="text-lg font-extrabold tracking-tight text-white">PRGminer</span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--tomato)] font-mono text-xs font-extrabold text-white">
+              PRG
+            </span>
+            <span className="text-xl font-extrabold tracking-tight text-white">PRGminer</span>
           </Link>
 
           <nav className="site-nav flex items-center h-full" aria-label="Primary">
             <button
-              className="menu-button inline-flex items-center gap-1.5 rounded-[3px] border border-white/25 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/10"
+              className="menu-button inline-flex items-center gap-1.5 rounded-lg border border-white/25 px-3.5 py-2 text-sm font-bold text-white hover:bg-white/10"
               type="button"
-              {...({ popovertarget: 'prg-site-menu', popovertargetaction: 'toggle' } as Record<string, string>)}
+              popoverTarget="prg-site-menu"
+              popoverTargetAction="toggle"
               aria-controls="prg-site-menu"
             >
               <Menu className="h-4 w-4" aria-hidden="true" />
@@ -112,7 +115,7 @@ export default function Navbar() {
                     ? pathname === '/'
                     : pathname === href || pathname?.startsWith(`${href}/`);
                 return (
-                  <li key={href} className="flex items-stretch">
+                  <li key={href} className="flex items-center">
                     <Link
                       href={href}
                       aria-current={active ? 'page' : undefined}
@@ -133,9 +136,9 @@ export default function Navbar() {
             href="https://kaabil.net"
             target="_blank"
             rel="noreferrer"
-            className="text-xs font-bold tracking-wide text-slate-200 transition hover:text-white"
+            className="text-sm font-semibold text-white transition hover:text-[#ff9c92]"
           >
-            <span className="text-[#ff6f61]">KAABiL</span> · Bioinformatics Lab
+            <span className="font-bold text-[#ff867a]">KAABiL</span> · Bioinformatics Lab
           </a>
           <span className="h-4 w-px bg-white/20" aria-hidden="true" />
           <a

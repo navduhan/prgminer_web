@@ -127,7 +127,7 @@ export default function StructureViewer({
     if (activeSelection) {
       componentRef.current.addRepresentation('ball+stick', {
         sele: activeSelection,
-        color: '#d93829',
+        color: '#c93325',
         aspectRatio: 2.2,
       });
     }
@@ -161,12 +161,12 @@ export default function StructureViewer({
 
   return (
     <div className="space-y-4">
-      {/* Sharp 1px/2px Architectural Control Bar */}
-      <div className="grid gap-4 border border-[var(--line)] border-t-2 border-t-[var(--navy)] bg-[var(--surface)] p-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* 3D Stage Controls */}
+      <div className="grid gap-4 rounded-xl border border-[var(--line-strong)] bg-[var(--surface)] p-4 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <label
             htmlFor="ngl-repr"
-            className="block font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--navy)]"
+            className="block text-sm font-bold text-[var(--navy)]"
           >
             Representation
           </label>
@@ -175,7 +175,7 @@ export default function StructureViewer({
             name="representation"
             value={representation}
             onChange={(e) => setRepresentation(e.target.value as (typeof REPRESENTATIONS)[number])}
-            className="mt-1.5 w-full rounded-[3px] border border-[var(--field-border)] bg-white px-3 py-2 text-sm text-[var(--ink)]"
+            className="prg-field mt-1.5 !py-2 !px-3 text-sm font-medium"
           >
             {REPRESENTATIONS.map((r) => (
               <option key={r} value={r}>
@@ -188,7 +188,7 @@ export default function StructureViewer({
         <div>
           <label
             htmlFor="ngl-color"
-            className="block font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--navy)]"
+            className="block text-sm font-bold text-[var(--navy)]"
           >
             Coloring scheme
           </label>
@@ -197,7 +197,7 @@ export default function StructureViewer({
             name="colorScheme"
             value={colorScheme}
             onChange={(e) => setColorScheme(e.target.value)}
-            className="mt-1.5 w-full rounded-[3px] border border-[var(--field-border)] bg-white px-3 py-2 text-sm text-[var(--ink)]"
+            className="prg-field mt-1.5 !py-2 !px-3 text-sm font-medium"
           >
             {COLOR_SCHEMES.map((c) => (
               <option key={c.value} value={c.value}>
@@ -210,18 +210,18 @@ export default function StructureViewer({
         <div>
           <label
             htmlFor="ngl-bg"
-            className="block font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--navy)]"
+            className="block text-sm font-bold text-[var(--navy)]"
           >
-            Stage canvas
+            Stage background
           </label>
           <select
             id="ngl-bg"
             name="background"
             value={background}
             onChange={(e) => setBackground(e.target.value)}
-            className="mt-1.5 w-full rounded-[3px] border border-[var(--field-border)] bg-white px-3 py-2 text-sm text-[var(--ink)]"
+            className="prg-field mt-1.5 !py-2 !px-3 text-sm font-medium"
           >
-            <option value="#f8fafc">Cool Surface (#f8fafc)</option>
+            <option value="#f8fafc">Light Surface (#f8fafc)</option>
             <option value="#ffffff">Pure White (#ffffff)</option>
             <option value="#09192d">USU Deep Navy (#09192d)</option>
           </select>
@@ -230,14 +230,14 @@ export default function StructureViewer({
         <div className="flex flex-wrap items-end gap-2">
           <button
             type="button"
-            className="btn-ghost-rule text-xs !py-2 !px-3"
+            className="btn-ghost-rule py-2 px-3.5 text-sm"
             onClick={() => componentRef.current?.autoView()}
           >
             Reset view
           </button>
           <button
             type="button"
-            className="btn-outline-sharp text-xs !py-2 !px-3"
+            className="btn-outline-sharp py-2 px-3.5 text-sm"
             disabled={saving}
             onClick={() => void exportSnapshot()}
           >
@@ -245,7 +245,7 @@ export default function StructureViewer({
           </button>
           <button
             type="button"
-            className="btn-tomato text-xs !py-2 !px-3"
+            className="btn-tomato py-2 px-3.5 text-sm"
             onClick={() =>
               triggerDownload(
                 new Blob([pdb], {
@@ -260,10 +260,10 @@ export default function StructureViewer({
         </div>
       </div>
 
-      {/* Sharp Conserved Motif Highlight Strip */}
+      {/* Conserved Motif Highlight Strip */}
       {sequence ? (
-        <div className="flex flex-wrap items-center gap-2 border border-[var(--line)] bg-white px-4 py-3 text-xs">
-          <span className="mr-1 font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--navy)]">
+        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[var(--line-strong)] bg-white px-4 py-3 text-sm">
+          <span className="mr-1 text-sm font-bold text-[var(--navy)]">
             Conserved R-gene motifs:
           </span>
           {motifMatches.map((m) => {
@@ -280,12 +280,12 @@ export default function StructureViewer({
                     prev.includes(m.name) ? prev.filter((x) => x !== m.name) : [...prev, m.name],
                   )
                 }
-                className={`rounded-[2px] border px-2.5 py-1 font-mono text-xs font-bold transition ${
+                className={`rounded-lg border px-3 py-1.5 font-mono text-[13px] font-bold transition ${
                   active
-                    ? 'border-[#d93829] bg-[#d93829] text-white'
+                    ? 'border-[var(--tomato)] bg-[var(--tomato)] text-white'
                     : hasHits
-                      ? 'border-[var(--line-strong)] bg-[var(--surface)] text-[var(--navy)] hover:border-[#d93829] hover:text-[#d93829]'
-                      : 'cursor-not-allowed border-[var(--line)] bg-[var(--surface)] text-[var(--muted)] opacity-50'
+                      ? 'cursor-pointer border-[var(--line-strong)] bg-[var(--surface)] text-[var(--navy)] hover:border-[var(--tomato)] hover:text-[var(--tomato)]'
+                      : 'cursor-not-allowed border-[var(--line)] bg-[var(--surface)] text-[var(--ink-secondary)] opacity-50'
                 }`}
               >
                 {m.name} ({m.ranges.length})
@@ -298,7 +298,7 @@ export default function StructureViewer({
       {error ? (
         <p
           role="alert"
-          className="rounded-[2px] border border-[var(--tomato-border)] border-l-4 border-l-[var(--danger)] bg-[var(--danger-soft)] px-4 py-3 text-sm text-[var(--danger)]"
+          className="rounded-xl border border-[var(--tomato-border)] bg-[var(--danger-soft)] px-4 py-3.5 text-sm font-semibold text-[var(--danger)]"
         >
           {error}
         </p>
@@ -306,7 +306,7 @@ export default function StructureViewer({
 
       <div
         ref={containerRef}
-        className="h-[520px] w-full overflow-hidden border border-[var(--line)] bg-[#f8fafc]"
+        className="h-[520px] w-full overflow-hidden rounded-2xl border border-[var(--line-strong)] bg-[#f8fafc]"
         aria-label={`Interactive 3D molecular structure for ${sampleId}`}
       />
     </div>

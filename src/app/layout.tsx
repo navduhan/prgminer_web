@@ -31,7 +31,7 @@ const gaId = process.env.NEXT_PUBLIC_GA_ID || '';
 export const metadata: Metadata = {
   title: 'PRGminer · Plant Resistance Gene Prediction & Classification',
   description:
-    'Two-phase deep learning identification and 8-class architectural classification of plant disease resistance genes (R-genes). Published in Frontiers in Plant Science (2025).',
+    'Two-phase deep learning identification and 8-family classification of plant disease resistance genes (R-genes). Published in Frontiers in Plant Science (2025).',
   keywords: [
     'PRGminer',
     'Plant Resistance Genes',
